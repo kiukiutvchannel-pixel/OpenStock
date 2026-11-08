@@ -1,8 +1,8 @@
 'use client';
 
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
+import SteadyTradeLogo from "@/components/brand/SteadyTradeLogo";
 import { BookOpen, Code2, Heart, Info, LayoutDashboard, LifeBuoy, LineChart, LogOut, Search, Star } from "lucide-react";
 import { zh } from "@/lib/i18n/zh-Hant";
 import { openSearch } from "@/components/SearchCommand";
@@ -35,8 +35,8 @@ const Sidebar = ({ user, watchlist }: SidebarProps) => {
 
     return (
         <aside className="sidebar">
-            <Link href="/dashboard" className="px-2 pt-1 pb-2" aria-label={zh.nav.dashboard}>
-                <Image src="/assets/images/logo.png" alt="OpenStock" width={150} height={38} priority />
+            <Link href="/dashboard" className="px-2 pt-1 pb-2" aria-label="穩步 SteadyTrade">
+                <SteadyTradeLogo iconClassName="size-9" />
             </Link>
 
             <button type="button" onClick={openSearch} className="side-cta">
@@ -113,6 +113,7 @@ const Sidebar = ({ user, watchlist }: SidebarProps) => {
                 )}
             </div>
 
+            <p className="px-2 text-[11px] leading-snug text-faint">基於 OpenStock（AGPL-3.0）修改</p>
             <div className="flex items-center gap-2.5 border-t border-line pt-3 px-1">
                 <Link href="/profile" className={cn('-m-1 flex min-w-0 flex-1 items-center gap-2.5 rounded-[10px] p-1 transition-colors hover:bg-white/5', pathname === '/profile' && 'bg-white/5')}>
                     <span className="grid size-8 flex-none place-items-center rounded-full bg-brand-soft text-[13px] font-bold text-brand-ink">

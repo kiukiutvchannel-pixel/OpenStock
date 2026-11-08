@@ -121,7 +121,7 @@ export default function CreateAlertModal({ symbol, currentPrice, currency = 'USD
                 ) : (
                     // Alerts are an OpenStock Cloud feature; the free hourly site points people to it
                     <div>
-                        <p className="kicker text-brand-ink">OpenStock Cloud</p>
+                        <p className="kicker text-brand-ink">穩步雲端</p>
                         <DialogTitle className="mt-1 text-xl font-bold tracking-tight">{zh.alerts.cloudTitle}</DialogTitle>
                         <DialogDescription className="mt-2 text-[13.5px] leading-relaxed text-muted-foreground">
                             {zh.alerts.cloudBody}

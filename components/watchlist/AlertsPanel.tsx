@@ -71,7 +71,7 @@ export default function AlertsPanel({ alerts }: { alerts: AlertRow[] }) {
         <>
             {!alertsEnabled && (
                 <p className="px-3 pt-3 pb-1 text-[12.5px] text-faint">
-                    {zh.alerts.pausedNote} <Link href="/#data" className="text-brand-ink hover:underline">OpenStock Cloud</Link>，所以這些提示暫停了。
+                    {zh.alerts.pausedNote} <Link href="/#data" className="text-brand-ink hover:underline">穩步雲端</Link>，所以這些提示暫停了。
                 </p>
             )}
             <ul className="row-list">

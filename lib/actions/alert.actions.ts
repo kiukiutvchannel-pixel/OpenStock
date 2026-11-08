@@ -21,7 +21,7 @@ export async function createAlert(params: {
     condition: 'ABOVE' | 'BELOW';
 }) {
     const userId = await requireUserId();
-    if (!alertsEnabled) throw new Error('到價提示屬於 OpenStock Cloud');
+    if (!alertsEnabled) throw new Error('到價提示屬於穩步的雲端功能');
     const symbol = String(params.symbol ?? '').trim().toUpperCase();
     const targetPrice = Number(params.targetPrice);
     const condition = params.condition;

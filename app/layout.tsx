@@ -17,8 +17,20 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "OpenStock",
-  description: "OpenStock is an open-source alternative to expensive market platforms. Track real-time prices, set personalized alerts, and explore detailed company insights — built openly, for everyone, forever free.",
+  title: {
+    default: "穩步 SteadyTrade",
+    template: "%s | 穩步",
+  },
+  description: "穩步 SteadyTrade 是基於 OpenStock（AGPL-3.0）修改的看盤工具。模擬交易只供練習，不是券商，也不是投資建議。",
+  applicationName: "穩步 SteadyTrade",
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/icons/icon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: [{ url: "/icons/apple-touch-icon.png", sizes: "180x180" }],
+  },
 };
 
 export default function RootLayout({

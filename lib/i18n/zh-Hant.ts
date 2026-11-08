@@ -1,11 +1,14 @@
 /**
  * Traditional Chinese (zh-Hant) copy for the signed-in app, auth forms, and paper trading.
- * Wording is plain Hong Kong Chinese. Symbols, brand name OpenStock, and API ids stay as-is.
+ * Wording is plain Hong Kong Chinese. Stock symbols and API ids stay as-is.
+ * The product name is 穩步 SteadyTrade. Upstream remains OpenStock (AGPL-3.0).
  * This is the single catalogue the UI reads, so labels can be tested without a browser.
  */
 
 export const zh = {
-    brand: 'OpenStock',
+    brand: '穩步',
+    brandEn: 'SteadyTrade',
+    brandLockup: '穩步 SteadyTrade',
     nav: {
         dashboard: '總覽',
         watchlist: '自選股',
@@ -18,7 +21,7 @@ export const zh = {
         apiDocs: 'API 文件',
         about: '關於',
         terms: '條款',
-        support: '支持 OpenStock',
+        support: '支持穩步',
         signOut: '登出',
         openMenu: '開啟選單',
         closeTab: (label: string) => `關閉 ${label}`,
@@ -26,7 +29,7 @@ export const zh = {
         sponsor: '贊助',
         sponsorSlotsOpen: '尚有贊助位置',
         sponsorSlotsLeft: (n: number) => `尚餘 ${n} 個贊助位置`,
-        sponsorPitch: '讓你的公司出現在每位 OpenStock 用戶眼前。',
+        sponsorPitch: '讓你的公司出現在每位穩步用戶眼前。',
         profile: '個人檔案',
     },
     dashboard: {
@@ -103,7 +106,7 @@ export const zh = {
         newsGeneral: '一般市場新聞',
         alerts: '到價提示',
         alertsActive: (n: number) => `${n} 個生效中 · 約每 5 分鐘檢查`,
-        alertsCloud: 'OpenStock Cloud 功能',
+        alertsCloud: '穩步雲端功能',
         company: '公司',
         price: '價格',
         today: '今日',
@@ -137,8 +140,8 @@ export const zh = {
         removed: (symbol: string) => `已移除 ${symbol} 的到價提示`,
         removeFailed: '未能移除到價提示',
         cloudTitle: '到價提示屬於 Cloud',
-        cloudBody: '電郵到價提示是 OpenStock Cloud 的功能，每月 5 美元，即將推出。',
-        seeCloud: '了解 OpenStock Cloud',
+        cloudBody: '電郵到價提示是穩步雲端功能，每月 5 美元，即將推出。',
+        seeCloud: '了解穩步雲端',
         emptyTitle: '還沒有到價提示',
         emptyBody: '在任何一行按鈴鐺，或在股票頁按「設定提示」。觸發時會電郵通知你。',
         pausedNote: '到價提示已改到',
@@ -160,7 +163,7 @@ export const zh = {
         saving: '儲存中',
         setToast: (symbol: string, direction: string, price: string) => `已設定提示：${symbol} ${direction} ${price}`,
         createFailed: '未能建立到價提示',
-        cloudOnly: '到價提示屬於 OpenStock Cloud',
+        cloudOnly: '到價提示屬於穩步的雲端功能',
         invalidCondition: '條件不正確',
         usCryptoOnly: '到價提示只適用於美股同加密貨幣',
         badTarget: '目標價必須是正數',

@@ -16,15 +16,15 @@ type Params = { slug: string };
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
     const { slug } = await params;
     const guide = findGuide(slug);
-    if (!guide) return { title: 'Guide not found | OpenStock', robots: { index: false, follow: false } };
+    if (!guide) return { title: 'Guide not found | 穩步', robots: { index: false, follow: false } };
 
-    const title = `${guide.title} | OpenStock`;
+    const title = `${guide.title} | 穩步`;
     const url = `${siteUrl()}/compare/${guide.slug}`;
     return {
         title,
         description: guide.description,
         alternates: { canonical: url },
-        openGraph: { title, description: guide.description, url, siteName: 'OpenStock', type: 'article' },
+        openGraph: { title, description: guide.description, url, siteName: '穩步', type: 'article' },
         twitter: { card: 'summary', title, description: guide.description },
     };
 }
@@ -47,7 +47,7 @@ export default async function GuidePage({ params }: { params: Promise<Params> })
                     {
                         '@type': 'BreadcrumbList',
                         itemListElement: [
-                            { '@type': 'ListItem', position: 1, name: 'OpenStock', item: `${origin}/` },
+                            { '@type': 'ListItem', position: 1, name: '穩步', item: `${origin}/` },
                             { '@type': 'ListItem', position: 2, name: 'Guides', item: `${origin}/compare` },
                             { '@type': 'ListItem', position: 3, name: guide.title, item: url },
                         ],
@@ -66,7 +66,7 @@ export default async function GuidePage({ params }: { params: Promise<Params> })
                         description: guide.description,
                         url,
                         author: { '@type': 'Organization', name: 'Open Dev Society', url: 'https://github.com/Open-Dev-Society' },
-                        publisher: { '@type': 'Organization', name: 'OpenStock', url: origin },
+                        publisher: { '@type': 'Organization', name: '穩步', url: origin },
                     },
                 ],
             }} />
@@ -134,8 +134,8 @@ export default async function GuidePage({ params }: { params: Promise<Params> })
 
             <section className="mx-auto mt-12 max-w-[800px] px-5">
                 <SignUpCta
-                    title="Use OpenStock free"
-                    body="Charts, a watchlist and the US filing pages are free. OpenStock is not a broker and this is not investment advice."
+                    title="Use 穩步 free"
+                    body="Charts, a watchlist and the US filing pages are free. 穩步 is not a broker and this is not investment advice."
                     href="/sign-up"
                     label="Create a free account"
                 />

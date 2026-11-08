@@ -7,7 +7,7 @@ import { zh } from '@/lib/i18n/zh-Hant';
  * Not financial advice. This page never places live brokerage orders.
  * Upstream: Open-Dev-Society/OpenStock (AGPL-3.0).
  */
-export const metadata = { title: '模擬交易 | OpenStock' };
+export const metadata = { title: '模擬交易 | 穩步' };
 
 export default async function PaperTradingPage() {
     const snapshot = await getPaperTradingSnapshot();

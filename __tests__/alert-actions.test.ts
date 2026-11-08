@@ -64,7 +64,7 @@ describe('alert actions are scoped to the session user', () => {
     it('refuses new alerts where Cloud features are off', async () => {
         flags.alertsEnabled = false;
         try {
-            await expect(createAlert({ symbol: 'AAPL', targetPrice: 200, condition: 'ABOVE' })).rejects.toThrow('OpenStock Cloud');
+            await expect(createAlert({ symbol: 'AAPL', targetPrice: 200, condition: 'ABOVE' })).rejects.toThrow('穩步');
             expect(create).not.toHaveBeenCalled();
         } finally {
             flags.alertsEnabled = true;

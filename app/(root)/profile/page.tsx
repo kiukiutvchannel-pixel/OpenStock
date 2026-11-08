@@ -11,7 +11,7 @@ import { alertsEnabled } from "@/lib/market-data";
 import { UI_LOCALE, UI_TIME_ZONE } from "@/lib/i18n/format";
 import { zh } from "@/lib/i18n/zh-Hant";
 
-export const metadata = { title: '個人檔案 | OpenStock' };
+export const metadata = { title: '個人檔案 | 穩步' };
 
 const METHOD_LABELS: Record<string, string> = {
     credential: zh.auth.methodEmail,
