@@ -8,6 +8,7 @@ import ChoiceChips from "@/components/forms/ChoiceChips";
 import { CountrySelectField } from "@/components/forms/CountrySelectField";
 import { INVESTMENT_GOALS, PREFERRED_INDUSTRIES, RISK_TOLERANCE_OPTIONS } from "@/lib/constants";
 import { updateProfile, type ProfileInput } from "@/lib/actions/profile.actions";
+import { zh } from "@/lib/i18n/zh-Hant";
 
 export default function ProfileForm({ initial }: { initial: ProfileInput }) {
     const router = useRouter();
@@ -19,10 +20,10 @@ export default function ProfileForm({ initial }: { initial: ProfileInput }) {
     const onSubmit = async (values: ProfileInput) => {
         const result = await updateProfile(values);
         if (!result.success) {
-            toast.error('Couldn’t save', { description: result.error });
+            toast.error(zh.auth.profileSaveFailed, { description: result.error });
             return;
         }
-        toast.success('Profile saved');
+        toast.success(zh.auth.profileSaved);
         reset(values);
         router.refresh();
     };
@@ -31,21 +32,21 @@ export default function ProfileForm({ initial }: { initial: ProfileInput }) {
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5 p-4">
             <InputField
                 name="name"
-                label="Name"
-                placeholder="Your name"
+                label={zh.auth.profileName}
+                placeholder={zh.auth.fullNamePlaceholder}
                 register={register}
                 error={errors.name}
-                validation={{ required: 'Name is required', minLength: { value: 2, message: 'At least 2 characters' } }}
+                validation={{ required: zh.auth.profileNameRequired, minLength: { value: 2, message: zh.auth.profileNameShort } }}
             />
-            <CountrySelectField name="country" label="Country" control={control} error={errors.country} required />
-            <ChoiceChips name="investmentGoals" label="Investment goal" options={INVESTMENT_GOALS} control={control} />
-            <ChoiceChips name="riskTolerance" label="Risk tolerance" options={RISK_TOLERANCE_OPTIONS} control={control} />
-            <ChoiceChips name="preferredIndustry" label="Preferred industry" options={PREFERRED_INDUSTRIES} control={control} />
+            <CountrySelectField name="country" label={zh.auth.country} control={control} error={errors.country} required />
+            <ChoiceChips name="investmentGoals" label={zh.auth.goal} options={INVESTMENT_GOALS} control={control} />
+            <ChoiceChips name="riskTolerance" label={zh.auth.risk} options={RISK_TOLERANCE_OPTIONS} control={control} />
+            <ChoiceChips name="preferredIndustry" label={zh.auth.industry} options={PREFERRED_INDUSTRIES} control={control} />
             <div className="flex items-center gap-3 pt-1">
                 <button type="submit" disabled={isSubmitting || !isDirty} className="btn btn-primary">
-                    {isSubmitting ? 'Saving' : 'Save changes'}
+                    {isSubmitting ? zh.auth.profileSaving : zh.auth.profileSave}
                 </button>
-                {!isDirty && <span className="text-[13px] text-faint">Up to date</span>}
+                {!isDirty && <span className="text-[13px] text-faint">{zh.auth.profileCurrent}</span>}
             </div>
         </form>
     );

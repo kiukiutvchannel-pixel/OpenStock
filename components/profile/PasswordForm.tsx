@@ -6,6 +6,7 @@ import InputField from "@/components/forms/InputField";
 import PasswordRequirements from "@/components/forms/PasswordRequirements";
 import { PASSWORD_VALIDATION } from "@/lib/constants";
 import { changePassword } from "@/lib/actions/profile.actions";
+import { zh } from "@/lib/i18n/zh-Hant";
 
 type PasswordInput = { currentPassword: string; newPassword: string };
 
@@ -18,10 +19,10 @@ export default function PasswordForm() {
     const onSubmit = async (values: PasswordInput) => {
         const result = await changePassword(values);
         if (!result.success) {
-            toast.error('Password not changed', { description: result.error });
+            toast.error(zh.auth.profilePasswordFailed, { description: result.error });
             return;
         }
-        toast.success('Password changed', { description: 'Other devices were signed out.' });
+        toast.success(zh.auth.profilePasswordChanged, { description: zh.auth.profilePasswordChangedSub });
         reset();
     };
 
@@ -29,18 +30,18 @@ export default function PasswordForm() {
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 p-4">
             <InputField
                 name="currentPassword"
-                label="Current password"
-                placeholder="Your current password"
+                label={zh.auth.profileCurrentPassword}
+                placeholder={zh.auth.profileCurrentPasswordPh}
                 type="password"
                 register={register}
                 error={errors.currentPassword}
-                validation={{ required: 'Enter your current password' }}
+                validation={{ required: zh.auth.profileCurrentPasswordRequired }}
             />
             <div className="flex flex-col gap-2">
                 <InputField
                     name="newPassword"
-                    label="New password"
-                    placeholder="At least 8 characters"
+                    label={zh.auth.newPassword}
+                    placeholder={zh.auth.passwordHint}
                     type="password"
                     register={register}
                     error={errors.newPassword}
@@ -49,7 +50,7 @@ export default function PasswordForm() {
                 <PasswordRequirements password={watch('newPassword') ?? ''} />
             </div>
             <button type="submit" disabled={isSubmitting} className="btn btn-ghost self-start">
-                {isSubmitting ? 'Changing' : 'Change password'}
+                {isSubmitting ? zh.auth.profileChanging : zh.auth.profileChange}
             </button>
         </form>
     );

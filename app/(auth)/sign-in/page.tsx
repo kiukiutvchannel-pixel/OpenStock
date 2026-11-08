@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import OpenDevSocietyBranding from "@/components/OpenDevSocietyBranding";
 import SocialAuthButtons from "@/components/forms/SocialAuthButtons";
 import React from "react";
+import { zh } from "@/lib/i18n/zh-Hant";
 
 const SignIn = () => {
     const router = useRouter()
@@ -33,61 +34,61 @@ const SignIn = () => {
                 router.push('/dashboard');
                 return;
             }
-            toast.error('Sign in failed', {
-                description: result.error ?? 'Invalid email or password.',
+            toast.error(zh.auth.signInFailed, {
+                description: result.error ?? zh.auth.invalidCredentials,
             });
         } catch (e) {
             console.error(e);
-            toast.error('Sign in failed', {
-                description: e instanceof Error ? e.message : 'Failed to sign in.'
+            toast.error(zh.auth.signInFailed, {
+                description: e instanceof Error ? e.message : zh.auth.signInError
             })
         }
     }
 
     return (
         <>
-            <h1 className="form-title mb-2">Welcome back</h1>
-            <p className="mb-8 text-faint">Sign in to your watchlist and alerts.</p>
+            <h1 className="form-title mb-2">{zh.auth.welcome}</h1>
+            <p className="mb-8 text-faint">{zh.auth.welcomeSub}</p>
 
             <SocialAuthButtons />
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                 <InputField
                     name="email"
-                    label="Email"
-                    placeholder="opendevsociety@cc.cc"
+                    label={zh.auth.email}
+                    placeholder="you@example.com"
                     register={register}
                     error={errors.email}
                     validation={{
-                        required: 'Email is required',
+                        required: zh.auth.emailRequired,
                         pattern: {
                             value: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
-                            message: 'Please enter a valid email address'
+                            message: zh.auth.emailInvalid
                         }
                     }}
                 />
 
                 <InputField
                     name="password"
-                    label="Password"
-                    placeholder="Enter your password"
+                    label={zh.auth.password}
+                    placeholder={zh.auth.passwordPlaceholder}
                     type="password"
                     register={register}
                     error={errors.password}
-                    validation={{ required: 'Password is required', minLength: 8 }}
+                    validation={{ required: zh.auth.passwordRequired, minLength: { value: 8, message: zh.auth.passwordMin } }}
                 />
 
                 <div className="flex justify-end">
                     <Link href="/forgot-password" className="footer-link text-sm">
-                        Forgot password?
+                        {zh.auth.forgot}
                     </Link>
                 </div>
 
                 <Button type="submit" disabled={isSubmitting} className="yellow-btn w-full mt-5">
-                    {isSubmitting ? 'Signing In' : 'Sign In'}
+                    {isSubmitting ? zh.auth.signingIn : zh.auth.signIn}
                 </Button>
 
-                <FooterLink text="Don't have an account?" linkText="Create an account" href="/sign-up" />
+                <FooterLink text={zh.auth.noAccount} linkText={zh.auth.createAccount} href="/sign-up" />
                 <OpenDevSocietyBranding outerClassName="mt-10 flex justify-center" />
             </form>
         </>

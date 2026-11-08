@@ -21,9 +21,13 @@ import { Label } from '@/components/ui/label';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import countryList from 'react-select-country-list';
+import { zh } from '@/lib/i18n/zh-Hant';
 
 const COUNTRY_LABEL_OVERRIDES: Record<string, string> = {
-    TW: 'Taiwan',
+    HK: '香港',
+    MO: '澳門',
+    TW: '台灣',
+    CN: '中國',
 };
 
 const COUNTRY_OPTIONS = countryList().getData().map((country) => ({
@@ -83,7 +87,7 @@ const CountrySelect = ({
             >
                 <Command className='bg-gray-800 border-gray-600'>
                     <CommandInput
-                        placeholder='Search countries...'
+                        placeholder={zh.auth.countrySearch}
                         className='country-select-input'
                     />
                     <CommandEmpty className='country-select-empty'>
@@ -137,7 +141,7 @@ export const CountrySelectField = ({
                 name={name}
                 control={control}
                 rules={{
-                    required: required ? `Please select ${label.toLowerCase()}` : false,
+                    required: required ? zh.auth.countryRequired : false,
                 }}
                 render={({ field }) => (
                     <CountrySelect value={field.value} onChange={field.onChange} />
@@ -145,7 +149,7 @@ export const CountrySelectField = ({
             />
             {error && <p className='text-[13px] text-down'>{error.message}</p>}
             <p className='text-[12.5px] text-faint'>
-                Helps us show market data and news relevant to you.
+                {zh.auth.countryHelp}
             </p>
         </div>
     );

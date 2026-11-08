@@ -1,10 +1,11 @@
 import { headers } from "next/headers";
 import { connectToDatabase } from "@/database/mongoose";
+import { zh } from '@/lib/i18n/zh-Hant';
 
 type Counter = { _id: string; count: number; expiresAt: Date };
 let ttlIndex: Promise<unknown> | null = null;
 
-export const TOO_MANY_ATTEMPTS = 'Too many attempts. Please wait a few minutes and try again.';
+export const TOO_MANY_ATTEMPTS = zh.auth.tooMany;
 
 // Fixed-window counters in MongoDB, shared by every server instance (an in-memory limit resets per serverless
 // instance). better-auth's own limiter only runs on its /api/auth routes, not on auth.api calls from server actions.

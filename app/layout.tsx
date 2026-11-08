@@ -27,7 +27,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" className="dark">
+        <html lang="zh-Hant" className="dark">
             <body
                 className={`${jakarta.variable} ${plexMono.variable} font-sans antialiased`}
             >

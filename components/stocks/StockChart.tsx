@@ -6,13 +6,14 @@ import TradingViewWidget from "@/components/TradingViewWidget";
 import Panel from "@/components/Panel";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { CANDLE_CHART_WIDGET_CONFIG } from "@/lib/constants";
+import { zh } from "@/lib/i18n/zh-Hant";
 
 // The free embed can't save indicators added inside it, so the ones picked here are kept per browser and
 // passed in as `studies` on every chart. Each id was checked on a live advanced-chart embed.
 const INDICATORS = [
-    { id: 'STD;SMA', label: 'Moving average (SMA)' },
-    { id: 'STD;EMA', label: 'Exponential MA (EMA)' },
-    { id: 'STD;Bollinger_Bands', label: 'Bollinger Bands' },
+    { id: 'STD;SMA', label: zh.stock.sma },
+    { id: 'STD;EMA', label: zh.stock.ema },
+    { id: 'STD;Bollinger_Bands', label: zh.stock.bollinger },
     { id: 'STD;VWAP', label: 'VWAP' },
     { id: 'STD;RSI', label: 'RSI' },
     { id: 'STD;MACD', label: 'MACD' },
@@ -46,10 +47,10 @@ export default function StockChart({ tvSymbol, scriptUrl }: { tvSymbol: string; 
     const menu = (
         <DropdownMenu>
             <DropdownMenuTrigger className="btn btn-ghost h-8 px-2.5 text-[13px]" disabled={!studies}>
-                <SlidersHorizontal /> Indicators{studies?.length ? <span className="num text-faint">{studies.length}</span> : null}
+                <SlidersHorizontal /> {zh.stock.indicators}{studies?.length ? <span className="num text-faint">{studies.length}</span> : null}
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel className="text-[12px] font-normal text-faint">Kept on every chart in this browser</DropdownMenuLabel>
+                <DropdownMenuLabel className="text-[12px] font-normal text-faint">{zh.stock.indicatorsKept}</DropdownMenuLabel>
                 {INDICATORS.map(({ id, label }) => (
                     <DropdownMenuCheckboxItem key={id} checked={studies?.includes(id) ?? false} onCheckedChange={() => toggle(id)} onSelect={(e) => e.preventDefault()}>
                         {label}
@@ -60,7 +61,7 @@ export default function StockChart({ tvSymbol, scriptUrl }: { tvSymbol: string; 
     );
 
     return (
-        <Panel title="Chart" sub="Live from TradingView · switch interval and style in the chart" action={menu}>
+        <Panel title={zh.stock.chart} sub={zh.stock.chartSub} action={menu}>
             {studies ? (
                 <TradingViewWidget scriptUrl={scriptUrl} config={{ ...CANDLE_CHART_WIDGET_CONFIG(tvSymbol), studies }} height={CHART_HEIGHT} allowExpand />
             ) : (

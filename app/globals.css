@@ -58,7 +58,7 @@
 }
 
 @theme inline {
-    --font-sans: var(--font-jakarta);
+    --font-sans: var(--font-jakarta), "PingFang HK", "PingFang TC", "Noto Sans CJK TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
     --font-mono: var(--font-plex-mono);
 
     --color-background: var(--background);

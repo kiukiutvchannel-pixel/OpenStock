@@ -1,3 +1,5 @@
+import { zh } from '@/lib/i18n/zh-Hant';
+
 // Community links, used across the app, landing page and emails
 export const REPO_URL = 'https://github.com/Open-Dev-Society/OpenStock';
 // GitHub account that receives sponsorships. Switch to 'Open-Dev-Society' once the org's
@@ -12,24 +14,24 @@ export const GOOD_FIRST_ISSUES_URL = `${REPO_URL}/issues?q=is%3Aopen+label%3A%22
 
 // Sign-up form select options
 export const INVESTMENT_GOALS = [
-    { value: 'Growth', label: 'Growth' },
-    { value: 'Income', label: 'Income' },
-    { value: 'Balanced', label: 'Balanced' },
-    { value: 'Conservative', label: 'Conservative' },
+    { value: 'Growth', label: zh.auth.goals.Growth },
+    { value: 'Income', label: zh.auth.goals.Income },
+    { value: 'Balanced', label: zh.auth.goals.Balanced },
+    { value: 'Conservative', label: zh.auth.goals.Conservative },
 ];
 
 export const RISK_TOLERANCE_OPTIONS = [
-    { value: 'Low', label: 'Low' },
-    { value: 'Medium', label: 'Medium' },
-    { value: 'High', label: 'High' },
+    { value: 'Low', label: zh.auth.risks.Low },
+    { value: 'Medium', label: zh.auth.risks.Medium },
+    { value: 'High', label: zh.auth.risks.High },
 ];
 
 export const PREFERRED_INDUSTRIES = [
-    { value: 'Technology', label: 'Technology' },
-    { value: 'Healthcare', label: 'Healthcare' },
-    { value: 'Finance', label: 'Finance' },
-    { value: 'Energy', label: 'Energy' },
-    { value: 'Consumer Goods', label: 'Consumer Goods' },
+    { value: 'Technology', label: zh.auth.industries.Technology },
+    { value: 'Healthcare', label: zh.auth.industries.Healthcare },
+    { value: 'Finance', label: zh.auth.industries.Finance },
+    { value: 'Energy', label: zh.auth.industries.Energy },
+    { value: 'Consumer Goods', label: zh.auth.industries['Consumer Goods'] },
 ];
 
 export const ALERT_TYPE_OPTIONS = [
@@ -48,7 +50,7 @@ type SymbolGroup = { title: string; symbols: [symbol: string, name: string][] };
 export const marketOverviewConfig = (groups: SymbolGroup[]) => ({
     colorTheme: 'dark',
     dateRange: '12M',
-    locale: 'en',
+    locale: 'zh_TW',
     largeChartUrl: '',
     isTransparent: true,
     showFloatingTooltip: true,
@@ -68,7 +70,7 @@ export const marketOverviewConfig = (groups: SymbolGroup[]) => ({
 });
 
 export const marketQuotesConfig = (groups: SymbolGroup[]) => ({
-    locale: 'en',
+    locale: 'zh_TW',
     showSymbolLogo: true,
     colorTheme: 'dark',
     isTransparent: true,
@@ -81,7 +83,7 @@ export const STOCK_HEATMAP_CONFIG = {
     blockColor: 'change',
     grouping: 'sector',
     isTransparent: true,
-    locale: 'en',
+    locale: 'zh_TW',
     symbolUrl: '',
     colorTheme: 'dark',
     exchanges: [],
@@ -96,7 +98,7 @@ export const CRYPTO_HEATMAP_CONFIG = {
     dataSource: 'Crypto',
     blockSize: 'market_cap_calc',
     blockColor: 'change',
-    locale: 'en',
+    locale: 'zh_TW',
     symbolUrl: '',
     colorTheme: 'dark',
     hasTopBar: false,
@@ -112,7 +114,7 @@ export const timelineConfig = (market: 'stock' | 'crypto' | 'forex') => ({
     feedMode: 'market',
     colorTheme: 'dark',
     isTransparent: true,
-    locale: 'en',
+    locale: 'zh_TW',
     market,
 });
 
@@ -120,7 +122,7 @@ export const symbolInfoConfig = (symbol: string) => ({
     symbol,
     colorTheme: 'dark',
     isTransparent: true,
-    locale: 'en',
+    locale: 'zh_TW',
     width: '100%',
 });
 
@@ -128,7 +130,7 @@ export const singleQuoteConfig = (symbol: string) => ({
     symbol,
     colorTheme: 'dark',
     isTransparent: true,
-    locale: 'en',
+    locale: 'zh_TW',
 });
 
 export const CANDLE_CHART_WIDGET_CONFIG = (symbol: string) => ({
@@ -141,12 +143,12 @@ export const CANDLE_CHART_WIDGET_CONFIG = (symbol: string) => ({
     hide_volume: false,
     hotlist: false,
     interval: 'D',
-    locale: 'en',
+    locale: 'zh_TW',
     save_image: false,
     style: 1,
     symbol: symbol.toUpperCase(),
     theme: 'dark',
-    timezone: 'exchange',
+    timezone: 'Asia/Taipei',
     backgroundColor: '#1f1e1a', // --card
     gridColor: 'rgba(255, 255, 255, 0.04)',
     watchlist: [],
@@ -161,7 +163,7 @@ export const TECHNICAL_ANALYSIS_WIDGET_CONFIG = (symbol: string) => ({
     symbol: symbol.toUpperCase(),
     colorTheme: 'dark',
     isTransparent: true,
-    locale: 'en',
+    locale: 'zh_TW',
     width: '100%',
     height: 400,
     interval: '1h',
@@ -173,7 +175,7 @@ export const COMPANY_PROFILE_WIDGET_CONFIG = (symbol: string) => ({
     symbol: symbol.toUpperCase(),
     colorTheme: 'dark',
     isTransparent: true,
-    locale: 'en',
+    locale: 'zh_TW',
     width: '100%',
     height: 440,
 });
@@ -182,7 +184,7 @@ export const COMPANY_FINANCIALS_WIDGET_CONFIG = (symbol: string) => ({
     symbol: symbol.toUpperCase(),
     colorTheme: 'dark',
     isTransparent: true,
-    locale: 'en',
+    locale: 'zh_TW',
     width: '100%',
     height: 464,
     displayMode: 'regular',
@@ -218,17 +220,17 @@ export const WATCHLIST_TABLE_HEADER = [
 ];
 
 export const PASSWORD_RULES = [
-    { label: 'At least 8 characters', test: (pw: string) => pw.length >= 8 },
-    { label: 'At least 1 uppercase letter', test: (pw: string) => /[A-Z]/.test(pw) },
-    { label: 'At least 1 lowercase letter', test: (pw: string) => /[a-z]/.test(pw) },
-    { label: 'At least 1 number', test: (pw: string) => /[0-9]/.test(pw) },
+    { label: zh.auth.rules.length, test: (pw: string) => pw.length >= 8 },
+    { label: zh.auth.rules.upper, test: (pw: string) => /[A-Z]/.test(pw) },
+    { label: zh.auth.rules.lower, test: (pw: string) => /[a-z]/.test(pw) },
+    { label: zh.auth.rules.number, test: (pw: string) => /[0-9]/.test(pw) },
 ] as const;
 
 export const PASSWORD_VALIDATION = {
-    required: 'Password is required',
-    minLength: { value: 8, message: 'Password must be at least 8 characters' },
+    required: zh.auth.passwordRequired,
+    minLength: { value: 8, message: zh.auth.passwordMin },
     pattern: {
         value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
-        message: 'Password must include uppercase, lowercase, and a number',
+        message: zh.auth.passwordPattern,
     },
 };

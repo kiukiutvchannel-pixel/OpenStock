@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import OpenDevSocietyBranding from "@/components/OpenDevSocietyBranding";
 import SocialAuthButtons from "@/components/forms/SocialAuthButtons";
 import React from "react";
+import { zh } from "@/lib/i18n/zh-Hant";
 
 const SignUp = () => {
     const router = useRouter()
@@ -45,53 +46,53 @@ const SignUp = () => {
                 router.push('/dashboard');
                 return;
             }
-            toast.error('Sign up failed', {
-                description: result.error ?? 'We could not create your account.',
+            toast.error(zh.auth.signUpFailed, {
+                description: result.error ?? zh.auth.signUpError,
             });
         } catch (e) {
             console.error(e);
-            toast.error('Sign up failed', {
-                description: e instanceof Error ? e.message : 'Failed to create an account.'
+            toast.error(zh.auth.signUpFailed, {
+                description: e instanceof Error ? e.message : zh.auth.signUpError
             })
         }
     }
 
     return (
         <>
-            <h1 className="form-title mb-2">Create your account</h1>
-            <p className="mb-8 text-faint">Free and open source. No card needed.</p>
+            <h1 className="form-title mb-2">{zh.auth.createTitle}</h1>
+            <p className="mb-8 text-faint">{zh.auth.createSub}</p>
 
             <SocialAuthButtons />
 
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
-                <section className="flex flex-col gap-4" aria-label="Account">
+                <section className="flex flex-col gap-4" aria-label={zh.auth.accountSection}>
                     <InputField
                         name="fullName"
-                        label="Full name"
-                        placeholder="Your name"
+                        label={zh.auth.fullName}
+                        placeholder={zh.auth.fullNamePlaceholder}
                         register={register}
                         error={errors.fullName}
-                        validation={{ required: 'Full name is required', minLength: 2 }}
+                        validation={{ required: zh.auth.fullNameRequired, minLength: { value: 2, message: zh.auth.profileNameShort } }}
                     />
                     <InputField
                         name="email"
-                        label="Email"
+                        label={zh.auth.email}
                         placeholder="you@example.com"
                         register={register}
                         error={errors.email}
                         validation={{
-                            required: 'Email is required',
+                            required: zh.auth.emailRequired,
                             pattern: {
                                 value: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
-                                message: 'Please enter a valid email address'
+                                message: zh.auth.emailInvalid
                             }
                         }}
                     />
                     <div className="flex flex-col gap-2">
                         <InputField
                             name="password"
-                            label="Password"
-                            placeholder="At least 8 characters"
+                            label={zh.auth.password}
+                            placeholder={zh.auth.passwordHint}
                             type="password"
                             register={register}
                             error={errors.password}
@@ -103,26 +104,26 @@ const SignUp = () => {
 
                 <section className="flex flex-col gap-5 border-t border-line pt-6" aria-labelledby="personalize">
                     <div>
-                        <p id="personalize" className="kicker text-brand-ink">Personalize</p>
-                        <p className="mt-1 text-[13px] text-faint">Used to tailor your welcome email.</p>
+                        <p id="personalize" className="kicker text-brand-ink">{zh.auth.personalize}</p>
+                        <p className="mt-1 text-[13px] text-faint">{zh.auth.personalizeHint}</p>
                     </div>
                     <CountrySelectField
                         name="country"
-                        label="Country"
+                        label={zh.auth.country}
                         control={control}
                         error={errors.country}
                         required
                     />
-                    <ChoiceChips name="investmentGoals" label="Investment goal" options={INVESTMENT_GOALS} control={control} />
-                    <ChoiceChips name="riskTolerance" label="Risk tolerance" options={RISK_TOLERANCE_OPTIONS} control={control} />
-                    <ChoiceChips name="preferredIndustry" label="Preferred industry" options={PREFERRED_INDUSTRIES} control={control} />
+                    <ChoiceChips name="investmentGoals" label={zh.auth.goal} options={INVESTMENT_GOALS} control={control} />
+                    <ChoiceChips name="riskTolerance" label={zh.auth.risk} options={RISK_TOLERANCE_OPTIONS} control={control} />
+                    <ChoiceChips name="preferredIndustry" label={zh.auth.industry} options={PREFERRED_INDUSTRIES} control={control} />
                 </section>
 
                 <div className="flex flex-col gap-4">
                     <Button type="submit" disabled={isSubmitting} className="yellow-btn w-full">
-                        {isSubmitting ? 'Creating account' : 'Create account'}
+                        {isSubmitting ? zh.auth.creating : zh.auth.create}
                     </Button>
-                    <FooterLink text="Already have an account?" linkText="Sign in" href="/sign-in" />
+                    <FooterLink text={zh.auth.haveAccount} linkText={zh.auth.signIn} href="/sign-in" />
                 </div>
 
                 <OpenDevSocietyBranding outerClassName="flex justify-center" />

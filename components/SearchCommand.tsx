@@ -6,6 +6,7 @@ import { ArrowUpRight, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { searchStocks } from "@/lib/actions/finnhub.actions";
 import { useDebounce } from "@/hooks/useDebounce";
+import { zh } from "@/lib/i18n/zh-Hant";
 
 const OPEN_SEARCH_EVENT = 'open-search';
 
@@ -75,20 +76,20 @@ export default function SearchCommand({ initialStocks }: { initialStocks: StockW
     return (
         <CommandDialog open={open} onOpenChange={setOpen} className="search-dialog">
             <div className="search-field">
-                <CommandInput value={searchTerm} onValueChange={setSearchTerm} placeholder="Search by company or symbol" className="search-input" />
+                <CommandInput value={searchTerm} onValueChange={setSearchTerm} placeholder={zh.search.placeholder} className="search-input" />
                 {loading && <Loader2 className="search-loader" />}
             </div>
             <CommandList className="search-list">
                 {loading ? (
-                    <CommandEmpty className="search-list-empty">Searching</CommandEmpty>
+                    <CommandEmpty className="search-list-empty">{zh.search.searching}</CommandEmpty>
                 ) : displayStocks?.length === 0 ? (
                     <div className="search-list-indicator">
-                        {isSearchMode ? `Nothing matches “${searchTerm.trim()}”` : 'No stocks available'}
+                        {isSearchMode ? zh.search.noMatch(searchTerm.trim()) : zh.search.none}
                     </div>
                 ) : (
                     <ul>
                         <li className="search-count">
-                            {isSearchMode ? 'Results' : 'Popular'}
+                            {isSearchMode ? zh.search.results : zh.search.popular}
                             <span className="num"> · {displayStocks?.length || 0}</span>
                         </li>
                         {displayStocks?.map((stock) => (

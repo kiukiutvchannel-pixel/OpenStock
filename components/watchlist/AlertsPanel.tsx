@@ -8,6 +8,8 @@ import { toast } from "sonner";
 import { deleteAlert } from "@/lib/actions/alert.actions";
 import { alertsEnabled } from "@/lib/market-data";
 import { formatPrice } from "@/lib/utils";
+import { UI_LOCALE, UI_TIME_ZONE } from "@/lib/i18n/format";
+import { zh } from "@/lib/i18n/zh-Hant";
 
 type AlertRow = {
     _id: string;
@@ -20,11 +22,11 @@ type AlertRow = {
 };
 
 const statusOf = (alert: AlertRow) => {
-    if (alert.triggered) return { label: 'Triggered', className: 'pill is-brand' };
-    if (!alertsEnabled) return { label: 'Paused', className: 'pill' };
-    if (alert.expiresAt && new Date(alert.expiresAt) < new Date()) return { label: 'Expired', className: 'pill' };
-    if (alert.active === false) return { label: 'Paused', className: 'pill' };
-    return { label: 'Watching', className: 'pill is-up' };
+    if (alert.triggered) return { label: zh.alerts.triggered, className: 'pill is-brand' };
+    if (!alertsEnabled) return { label: zh.alerts.paused, className: 'pill' };
+    if (alert.expiresAt && new Date(alert.expiresAt) < new Date()) return { label: zh.alerts.expired, className: 'pill' };
+    if (alert.active === false) return { label: zh.alerts.paused, className: 'pill' };
+    return { label: zh.alerts.watching, className: 'pill is-up' };
 };
 
 export default function AlertsPanel({ alerts }: { alerts: AlertRow[] }) {
@@ -35,10 +37,10 @@ export default function AlertsPanel({ alerts }: { alerts: AlertRow[] }) {
         setPendingId(alert._id);
         try {
             await deleteAlert(alert._id);
-            toast.success(`Alert for ${alert.symbol} removed`);
+            toast.success(zh.alerts.removed(alert.symbol));
             router.refresh();
         } catch {
-            toast.error("Couldn’t remove the alert");
+            toast.error(zh.alerts.removeFailed);
         } finally {
             setPendingId(null);
         }
@@ -48,9 +50,9 @@ export default function AlertsPanel({ alerts }: { alerts: AlertRow[] }) {
         return (
             <div className="empty-state py-10">
                 <span className="empty-icon"><BellRing className="size-5" /></span>
-                <h3>Alerts come with Cloud</h3>
-                <p className="max-w-64 text-[13px]">Email price alerts are part of OpenStock Cloud, $5 a month and coming soon.</p>
-                <Link href="/#data" className="btn btn-ghost mt-2">See OpenStock Cloud</Link>
+                <h3>{zh.alerts.cloudTitle}</h3>
+                <p className="max-w-64 text-[13px]">{zh.alerts.cloudBody}</p>
+                <Link href="/#data" className="btn btn-ghost mt-2">{zh.alerts.seeCloud}</Link>
             </div>
         );
     }
@@ -59,8 +61,8 @@ export default function AlertsPanel({ alerts }: { alerts: AlertRow[] }) {
         return (
             <div className="empty-state py-10">
                 <span className="empty-icon"><BellRing className="size-5" /></span>
-                <h3>No alerts yet</h3>
-                <p className="max-w-60 text-[13px]">Use the bell on any row, or “Set alert” on a stock page. We email you when it fires.</p>
+                <h3>{zh.alerts.emptyTitle}</h3>
+                <p className="max-w-60 text-[13px]">{zh.alerts.emptyBody}</p>
             </div>
         );
     }
@@ -69,7 +71,7 @@ export default function AlertsPanel({ alerts }: { alerts: AlertRow[] }) {
         <>
             {!alertsEnabled && (
                 <p className="px-3 pt-3 pb-1 text-[12.5px] text-faint">
-                    Alerts moved to <Link href="/#data" className="text-brand-ink hover:underline">OpenStock Cloud</Link>, so these are paused.
+                    {zh.alerts.pausedNote} <Link href="/#data" className="text-brand-ink hover:underline">OpenStock Cloud</Link>，所以這些提示暫停了。
                 </p>
             )}
             <ul className="row-list">
@@ -80,8 +82,8 @@ export default function AlertsPanel({ alerts }: { alerts: AlertRow[] }) {
                             <div className="min-w-0 flex-1">
                                 <p className="mono font-semibold text-foreground">{alert.symbol}</p>
                                 <p className="num truncate text-[12.5px] text-faint">
-                                    {alert.condition === 'ABOVE' ? 'Above' : 'Below'} {formatPrice(alert.targetPrice)}
-                                    {alert.expiresAt && !alert.triggered && ` · until ${new Date(alert.expiresAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`}
+                                    {alert.condition === 'ABOVE' ? zh.alerts.above : zh.alerts.below} {formatPrice(alert.targetPrice)}
+                                    {alert.expiresAt && !alert.triggered && ` · ${zh.alerts.until} ${new Date(alert.expiresAt).toLocaleDateString(UI_LOCALE, { timeZone: UI_TIME_ZONE, month: 'numeric', day: 'numeric' })}`}
                                 </p>
                             </div>
                             <span className={status.className}>{status.label}</span>
@@ -90,8 +92,8 @@ export default function AlertsPanel({ alerts }: { alerts: AlertRow[] }) {
                                 onClick={() => handleDelete(alert)}
                                 disabled={pendingId === alert._id}
                                 className="icon-btn is-danger"
-                                title="Remove alert"
-                                aria-label={`Remove alert for ${alert.symbol}`}
+                                title={zh.alerts.remove}
+                                aria-label={zh.alerts.removeFor(alert.symbol)}
                             >
                                 <Trash2 />
                             </button>

@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 const MINI_CHART = 'https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js';
 const miniChart = (symbol: string) => ({
-    symbol, locale: 'en', dateRange: '1M', colorTheme: 'dark', isTransparent: true, autosize: true,
+    symbol, locale: 'zh_TW', dateRange: '1M', colorTheme: 'dark', isTransparent: true, autosize: true,
     trendLineColor: '#47d9bb', underLineColor: 'rgba(71, 217, 187, 0.14)', underLineBottomColor: 'rgba(71, 217, 187, 0)',
 });
 

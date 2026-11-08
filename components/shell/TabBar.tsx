@@ -3,18 +3,20 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, Menu, Plus, Star, X } from "lucide-react";
+import { LayoutDashboard, LineChart, Menu, Plus, Star, X } from "lucide-react";
 import { openSearch } from "@/components/SearchCommand";
+import { zh } from "@/lib/i18n/zh-Hant";
 import { cn } from "@/lib/utils";
 
-const PINNED = ['/dashboard', '/watchlist'];
+const PINNED = ['/dashboard', '/watchlist', '/paper-trading'];
 const STORAGE_KEY = 'openstock-tabs';
 const MAX_TABS = 12;
 
 const PAGE_LABELS: Record<string, string> = {
-    '/dashboard': 'Overview',
-    '/watchlist': 'Watchlist',
-    '/profile': 'Profile',
+    '/dashboard': zh.nav.dashboard,
+    '/watchlist': zh.nav.watchlist,
+    '/paper-trading': zh.nav.paperShort,
+    '/profile': zh.nav.profile,
 };
 
 // Pages become browser-style tabs; stock pages are labelled by their symbol.
@@ -70,7 +72,7 @@ const TabBar = ({ onMenu }: { onMenu: () => void }) => {
 
     return (
         <div className="tabbar">
-            <button type="button" onClick={onMenu} className="chrome-btn lg:hidden" aria-label="Open menu">
+            <button type="button" onClick={onMenu} className="chrome-btn lg:hidden" aria-label={zh.nav.openMenu}>
                 <Menu />
             </button>
 
@@ -99,12 +101,13 @@ const TabBar = ({ onMenu }: { onMenu: () => void }) => {
                             <Link href={path} aria-current={active ? 'page' : undefined} className="flex min-w-0 flex-1 items-center gap-2 before:absolute before:inset-0 before:content-['']">
                                 {path === '/dashboard' && <LayoutDashboard />}
                                 {path === '/watchlist' && <Star />}
+                                {path === '/paper-trading' && <LineChart />}
                                 <span className={cn('tab-label', isStock && 'mono text-[13px]')}>{tabLabel(path)}</span>
                             </Link>
                             {!pinned && (
                                 <button
                                     type="button"
-                                    aria-label={`Close ${tabLabel(path)}`}
+                                    aria-label={zh.nav.closeTab(tabLabel(path) ?? '')}
                                     className="tab-close relative z-10"
                                     onClick={() => closeTab(path)}
                                 >
@@ -116,7 +119,7 @@ const TabBar = ({ onMenu }: { onMenu: () => void }) => {
                 })}
             </div>
 
-            <button type="button" onClick={openSearch} className="chrome-btn -ml-2" aria-label="Open a stock" title="Open a stock (⌘K)">
+            <button type="button" onClick={openSearch} className="chrome-btn -ml-2" aria-label={zh.nav.openStock} title={`${zh.nav.openStock} (⌘K)`}>
                 <Plus />
             </button>
         </div>
