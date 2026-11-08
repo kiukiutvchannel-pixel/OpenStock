@@ -14,6 +14,7 @@ import {
     tradingDaysEnding,
     zonedParts,
 } from '@/lib/paper-trading/calendar';
+import { fetchFutuDailyBars, type FutuHistoryRequest } from '@/lib/paper-trading/futu-history';
 import type { DailyBar } from '@/lib/paper-trading/history';
 import {
     classifyFetchError,
@@ -39,7 +40,7 @@ export type PaperQuote = {
 
 export type FetchedBars = {
     bars: DailyBar[] | null;
-    source: 'finnhub-candle' | 'demo' | 'unavailable';
+    source: 'finnhub-candle' | 'futu-opend' | 'demo' | 'unavailable';
     issue: DataIssue | null;
 };
 
@@ -155,11 +156,7 @@ async function readResponse(url: string, key: string, fetcher: typeof fetch): Pr
     }
 }
 
-export async function fetchDailyBars(symbol: string, now = new Date(), fetcher: typeof fetch = fetch): Promise<FetchedBars> {
-    const ticker = symbol.trim().toUpperCase();
-    if (isExplicitDemoMode()) {
-        return { bars: demoDailyBars(ticker, now), source: 'demo', issue: null };
-    }
+async function fetchFinnhubDailyBars(ticker: string, now: Date, fetcher: typeof fetch): Promise<FetchedBars> {
     const keys = finnhubKeys();
     if (keys.length === 0) return { bars: null, source: 'unavailable', issue: 'missing' };
 
@@ -186,6 +183,31 @@ export async function fetchDailyBars(symbol: string, now = new Date(), fetcher: 
         bars.push({ date, close });
     }
     return { bars, source: 'finnhub-candle', issue: null };
+}
+
+export async function fetchDailyBars(
+    symbol: string,
+    now = new Date(),
+    fetcher: typeof fetch = fetch,
+    futuRequest?: FutuHistoryRequest,
+): Promise<FetchedBars> {
+    const ticker = symbol.trim().toUpperCase();
+    if (isExplicitDemoMode()) {
+        return { bars: demoDailyBars(ticker, now), source: 'demo', issue: null };
+    }
+    const useFutu = (process.env.HISTORY_PROVIDER || '').trim().toLowerCase() === 'futu';
+    if (!useFutu) return fetchFinnhubDailyBars(ticker, now, fetcher);
+
+    const futu = await fetchFutuDailyBars(ticker, now, futuRequest);
+    if (futu.bars && futu.bars.length > 0 && !futu.issue) {
+        return { bars: futu.bars, source: 'futu-opend', issue: null };
+    }
+    const finnhub = await fetchFinnhubDailyBars(ticker, now, fetcher);
+    if (finnhub.source === 'finnhub-candle' && finnhub.bars && finnhub.bars.length > 0 && !finnhub.issue) {
+        return finnhub;
+    }
+    if (futu.issue) return { bars: null, source: 'unavailable', issue: futu.issue };
+    return finnhub;
 }
 
 export async function resolvePaperQuote(symbol: string, now = new Date(), fetcher: typeof fetch = fetch): Promise<PaperQuote> {

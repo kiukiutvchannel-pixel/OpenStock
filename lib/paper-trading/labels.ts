@@ -4,6 +4,8 @@ export function historySourceLabel(source: string | null | undefined): string {
     switch (source) {
         case 'finnhub-candle':
             return 'Finnhub 日線';
+        case 'futu-opend':
+            return '富途 OpenD';
         case 'demo':
             return '示範（虛構歷史）';
         case 'mock':

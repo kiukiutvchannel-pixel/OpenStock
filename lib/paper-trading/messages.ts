@@ -17,7 +17,10 @@ export type DataIssue =
     | 'future'
     | 'gap'
     | 'stale'
-    | 'demo';
+    | 'demo'
+    | 'opend_down'
+    | 'futu_permission'
+    | 'futu_quota';
 
 export function historyIssueMessage(issue: DataIssue): string {
     switch (issue) {
@@ -47,6 +50,12 @@ export function historyIssueMessage(issue: DataIssue): string {
             return '日線格式無效。不會產生可執行訊號。';
         case 'demo':
             return '示範模式的數字是虛構的，不能自動落單，也不能當作真實成交。';
+        case 'opend_down':
+            return '連不上富途 OpenD。請先開啟 FutuOpenD，在設定啟用 WebSocket，並確認 FUTU_OPEND_PORT 是 WebSocket 端口（通常不是 11111）。沒有用假歷史代替，因此不會產生可執行訊號。';
+        case 'futu_permission':
+            return '富途沒有這隻美股的行情權限，讀不到日線。沒有用假歷史代替，因此不會產生可執行訊號。';
+        case 'futu_quota':
+            return '富途歷史 K 線額度已用完。請稍後再試。沒有用假歷史代替，因此不會產生可執行訊號。';
         default:
             return '日線未能通過檢查。不會產生可執行訊號。';
     }

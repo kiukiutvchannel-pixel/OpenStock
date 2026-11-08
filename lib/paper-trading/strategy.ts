@@ -103,7 +103,8 @@ export function analyzeFromData(input: {
     const judgedQuote = assessQuote(input.quote, input.now);
     const quote: PaperQuote = { ...input.quote, ...judgedQuote };
     const quoteExecutable = quote.source === 'finnhub' && quote.executable && !demo;
-    const historyExecutable = history.ok && history.executable && history.source === 'finnhub-candle' && !demo;
+    const realHistory = history.source === 'finnhub-candle' || history.source === 'futu-opend';
+    const historyExecutable = history.ok && history.executable && realHistory && !demo;
     const executable = historyExecutable && quoteExecutable && (action === 'buy' || action === 'sell');
 
     let blockReason: string | null = null;

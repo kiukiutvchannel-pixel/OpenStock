@@ -1,41 +1,24 @@
-﻿# 穩步 SteadyTrade 更新（安全修正 + 繁體中文 + 改名）
+﻿﻿# 穩步：用富途 OpenD 讀日線
 
-呢個壓縮檔係**由你原本個 `openstock-paper` 源碼包到而家**所有改過嘅檔，一次過蓋上去就得。入面有：
-
-- 模擬交易安全修正（冇真實日線就唔會落單）
-- 繁體中文介面
-- 個名改做 **穩步 SteadyTrade**（新圖示係向量圖，唔係張 JPG）
-
-請蓋去：
+呢個係**上一包之後**嘅更新，唔係成個專案。請蓋去：
 
 `C:\Users\comfy\Desktop\openstock-paper\openstock-paper`
 
-呢份說明用 UTF-8（有 BOM）。如果 PowerShell 5.1 出亂碼，用記事本開，或者：
+模擬交易嘅日線改由你部 Windows 上面嘅 **FutuOpenD** 讀。報價仍然用 Finnhub。讀唔到日線就唔會落單，亦唔會再用假歷史。呢個程式**只讀歷史 K 線**，唔會解鎖交易，亦唔會落單。
+
+呢份說明係 UTF-8（有 BOM）。PowerShell 5.1 如果亂碼：
 
 ```powershell
 Get-Content -Encoding UTF8 .\UPDATE.md
 ```
 
-原專案係 Open-Dev-Society 嘅 OpenStock，授權 **AGPL-3.0**（`LICENSE` 冇改）。頁尾有一句：基於 OpenStock（AGPL-3.0）修改。
-
 ---
 
-## 安裝之前
+## 1. 停伺服器
 
-- 呢次**冇改** `package.json` 同 `package-lock.json`，所以平常**唔使** `npm.cmd ci`。
-- **唔好**覆蓋 `.env`。唔好清 Atlas，亦唔好撳「重設模擬賬簿」。
-- 我哋喺另一部機跑過測試同編譯。**未連你嘅 Atlas，亦未喺你部 Windows 跑過。** 唔代表你部機已經搞好，亦唔保證策略賺錢。
-- `npm audit` 仍然係 25 項（10 中、14 高、1 嚴重）。嚴重嗰項係建置工具帶入嚟嘅 `tar`。冇強制升級。請只開 `http://localhost:3000`。
+去緊跑緊開發伺服器嗰個視窗，按 `Ctrl+C`，等到返到提示字元。
 
----
-
-## PowerShell 5.1 步驟
-
-### 1. 停伺服器
-
-去緊跑 `npm run dev` 嗰個視窗，按 `Ctrl+C`，等到返到提示字元。
-
-### 2. 備份成個資料夾
+## 2. 備份
 
 ```powershell
 $dst = "C:\Users\comfy\Desktop\openstock-paper\openstock-paper"
@@ -43,24 +26,18 @@ $stamp = Get-Date -Format "yyyyMMdd-HHmmss"
 Copy-Item -LiteralPath $dst -Destination ($dst + "-backup-" + $stamp) -Recurse -Force
 ```
 
-備份入面有你嘅 `.env`。唔好上傳或者寄畀人。
+備份入面有 `.env`。唔好上傳。
 
-### 3. 解壓
+## 3. 解壓同複製（唔好覆蓋 .env）
 
-假設壓縮檔放咗喺桌面，檔名 `openstock-paper-zh-safety-update.zip`：
+假設壓縮檔喺桌面，檔名 `openstock-futu-history-update.zip`：
 
 ```powershell
-$zip = "C:\Users\comfy\Desktop\openstock-paper-zh-safety-update.zip"
-$src = "C:\Users\comfy\Desktop\openstock-paper-update"
+$zip = "C:\Users\comfy\Desktop\openstock-futu-history-update.zip"
+$src = "C:\Users\comfy\Desktop\openstock-futu-update"
+$dst = "C:\Users\comfy\Desktop\openstock-paper\openstock-paper"
 if (Test-Path -LiteralPath $src) { Remove-Item -LiteralPath $src -Recurse -Force }
 Expand-Archive -LiteralPath $zip -DestinationPath $src
-```
-
-### 4. 複製檔案，但唔好覆蓋 `.env`
-
-```powershell
-$src = "C:\Users\comfy\Desktop\openstock-paper-update"
-$dst = "C:\Users\comfy\Desktop\openstock-paper\openstock-paper"
 Get-ChildItem -LiteralPath $src -Recurse -File | ForEach-Object {
   if ($_.Name -eq ".env") { return }
   $rel = $_.FullName.Substring((Resolve-Path -LiteralPath $src).Path.Length).TrimStart("\")
@@ -69,141 +46,83 @@ Get-ChildItem -LiteralPath $src -Recurse -File | ForEach-Object {
   if (-not (Test-Path -LiteralPath $folder)) { New-Item -ItemType Directory -Force -Path $folder | Out-Null }
   Copy-Item -LiteralPath $_.FullName -Destination $target -Force
 }
+```
+
+確認 `.env` 仲喺度（應顯示 `True`）：
+
+```powershell
 Test-Path -LiteralPath "C:\Users\comfy\Desktop\openstock-paper\openstock-paper\.env"
 ```
 
-最後一行應該係 `True`。唔好用 `.env.example` 取代 `.env`。
+## 4. 刪走舊 favicon（如果仲喺度）
 
-### 5. 刪走舊嘅 favicon
-
-舊包嘅 `public\favicon.ico` 會同 `app\favicon.ico` 撞名，Next.js 會報 `conflicting public file and page file for /favicon.ico`。複製完之後，如果個檔仲喺度，就刪咗佢。而家用緊嘅圖示係 `app\favicon.ico`。
+上一包可能留低 `public\favicon.ico`，會同 `app\favicon.ico` 相撞。
 
 ```powershell
 Set-Location -LiteralPath "C:\Users\comfy\Desktop\openstock-paper\openstock-paper"
 if (Test-Path -LiteralPath ".\public\favicon.ico") { Remove-Item -LiteralPath ".\public\favicon.ico" -Force }
 ```
 
-### 6. 依賴
+## 5. 開 FutuOpenD 嘅 WebSocket
 
-呢次冇改依賴，可以跳過。如果 `node_modules` 唔見咗，先至行：
+1. 打開 **FutuOpenD**，登入。只要行情。唔使解鎖交易密碼。
+2. 設定入面，API 嘅 **11111** 係 TCP 端口。今次用嘅官方 Node 套件 `futu-api` **用唔到 11111**。
+3. 喺同一個設定開 **WebSocket**。唔好勾 SSL（本機 `127.0.0.1`）。
+4. 記住 WebSocket 端口。官方例子多數係 **33333**。如果你改過，用你自己個端口。
+5. 如果畫面有 WebSocket 密鑰，抄低。唔好貼去聊天或者 commit。
+
+OpenD 要保持開住，個程式先讀到日線。
+
+## 6. 用手改 .env（唔好成份覆蓋）
+
+用記事本開 `C:\Users\comfy\Desktop\openstock-paper\openstock-paper\.env`。
+
+**留低**你原有嘅 `MONGODB_URI`、`BETTER_AUTH_SECRET`、`FINNHUB_API_KEY`。Finnhub 仍然負責報價。
+
+喺檔案尾加（密鑰留空就係 OpenD 冇設密鑰；有就填你抄低嗰串）：
+
+```env
+HISTORY_PROVIDER=futu
+FUTU_OPEND_HOST=127.0.0.1
+FUTU_OPEND_PORT=33333
+FUTU_OPEND_KEY=
+```
+
+`FUTU_OPEND_PORT` 一定要係第 5 步個 **WebSocket** 端口。填 11111 會連唔上。
+
+## 7. 裝新依賴同再開
+
+呢次加咗 `futu-api`，要裝依賴。
 
 ```powershell
 Set-Location -LiteralPath "C:\Users\comfy\Desktop\openstock-paper\openstock-paper"
 npm.cmd ci
-```
-
-### 7. 開返個程式
-
-```powershell
-Set-Location -LiteralPath "C:\Users\comfy\Desktop\openstock-paper\openstock-paper"
 npm.cmd run dev -- --hostname 127.0.0.1
 ```
 
-瀏覽器開 http://localhost:3000
+瀏覽器開 http://localhost:3000 ，入模擬交易，撳「立即分析」。
 
-登入頁同左邊選單應該見到 **SteadyTrade** 同 **穩步**。模擬交易嘅自動提交仍然預設關閉。
+- 成功嘅話，歷史來源會寫 **富途 OpenD**。報價來源仍然係 Finnhub。
+- 如果寫「連不上富途 OpenD」，檢查 OpenD 開咗未、WebSocket 端口同 `.env` 係咪一樣。
+- 如果寫「行情權限」或者「額度已用完」，就係富途帳戶限制，唔會改用假日線落單。
 
----
+呢次測試冇連你部機嘅 OpenD，亦冇改你嘅 `.env`。唔代表策略會賺錢。
 
 ## 檔案清單
 
-共 98 個檔。完整名單亦喺 `MANIFEST.txt`。壓縮檔唔包含 `.env`、`.git`、`node_modules`、`.next`。
+今次 ZIP 只係上一包之後改過嘅檔，共 14 個。唔包含 `.env`。
 
 - `.env.example`
 - `MANIFEST.txt`
-- `PAPER-TRADING-NOTICE.md`
-- `README.md`
 - `UPDATE.md`
-- `__tests__/alert-actions.test.ts`
-- `__tests__/paper-trading-safety.test.ts`
-- `__tests__/zh-hant-ui.test.ts`
-- `app/(auth)/forgot-password/page.tsx`
-- `app/(auth)/layout.tsx`
-- `app/(auth)/reset-password/ResetPasswordForm.tsx`
-- `app/(auth)/sign-in/page.tsx`
-- `app/(auth)/sign-up/page.tsx`
-- `app/(marketing)/about/page.tsx`
-- `app/(marketing)/api-docs/page.tsx`
-- `app/(marketing)/changelog/page.tsx`
-- `app/(marketing)/compare/[slug]/page.tsx`
-- `app/(marketing)/compare/page.tsx`
-- `app/(marketing)/help/page.tsx`
-- `app/(marketing)/layout.tsx`
-- `app/(marketing)/page.tsx`
-- `app/(marketing)/s/[ticker]/page.tsx`
-- `app/(marketing)/s/page.tsx`
-- `app/(marketing)/sponsor/page.tsx`
-- `app/(marketing)/terms/page.tsx`
-- `app/(root)/dashboard/page.tsx`
-- `app/(root)/paper-trading/page.tsx`
-- `app/(root)/profile/page.tsx`
-- `app/(root)/stocks/[symbol]/page.tsx`
-- `app/(root)/watchlist/page.tsx`
-- `app/favicon.ico`
-- `app/globals.css`
-- `app/icon.png`
-- `app/layout.tsx`
-- `app/manifest.ts`
-- `components/DataFreshness.tsx`
-- `components/MarketSwitcher.tsx`
-- `components/SearchCommand.tsx`
-- `components/TradingViewWidget.tsx`
-- `components/WatchlistButton.tsx`
-- `components/brand/SteadyTradeLogo.tsx`
-- `components/forms/CountrySelectField.tsx`
-- `components/forms/SocialAuthButtons.tsx`
-- `components/landing/ProductPreview.tsx`
-- `components/paper-trading/PaperTradingClient.tsx`
-- `components/profile/PasswordForm.tsx`
-- `components/profile/ProfileForm.tsx`
-- `components/shell/Sidebar.tsx`
-- `components/shell/TabBar.tsx`
-- `components/sponsors/SponsorsBand.tsx`
-- `components/stocks/StockChart.tsx`
-- `components/stocks/StockHeader.tsx`
-- `components/watchlist/AlertsPanel.tsx`
-- `components/watchlist/CreateAlertModal.tsx`
-- `components/watchlist/NewsList.tsx`
-- `components/watchlist/WatchlistTable.tsx`
-- `database/models/paper-account.model.ts`
-- `database/models/paper-idempotency.model.ts`
-- `database/models/paper-order.model.ts`
-- `database/models/paper-position.model.ts`
-- `database/models/strategy-signal.model.ts`
-- `lib/actions/alert.actions.ts`
-- `lib/actions/auth.actions.ts`
-- `lib/actions/paper-trading.actions.ts`
-- `lib/actions/profile.actions.ts`
-- `lib/actions/watchlist.actions.ts`
-- `lib/constants.ts`
-- `lib/i18n/format.ts`
-- `lib/i18n/zh-Hant.ts`
-- `lib/inngest/functions.ts`
-- `lib/inngest/prompts.ts`
-- `lib/nodemailer/index.ts`
-- `lib/nodemailer/reset-password.ts`
-- `lib/nodemailer/templates.ts`
-- `lib/paper-trading/calendar.ts`
-- `lib/paper-trading/constants.ts`
-- `lib/paper-trading/exposure.ts`
+- `__tests__/futu-history.test.ts`
+- `lib/paper-trading/futu-history.ts`
 - `lib/paper-trading/history.ts`
-- `lib/paper-trading/idempotency.ts`
 - `lib/paper-trading/labels.ts`
 - `lib/paper-trading/messages.ts`
 - `lib/paper-trading/quotes.ts`
 - `lib/paper-trading/strategy.ts`
-- `lib/paper-trading/types.ts`
-- `lib/rate-limit.ts`
-- `lib/seo/comparisons.ts`
-- `lib/utils.ts`
-- `next-env.d.ts`
-- `public/brand/steadytrade-icon.svg`
-- `public/brand/steadytrade-wordmark.svg`
-- `public/icons/apple-touch-icon.png`
-- `public/icons/icon-16.png`
-- `public/icons/icon-180.png`
-- `public/icons/icon-192.png`
-- `public/icons/icon-32.png`
-- `public/icons/icon-48.png`
-- `public/icons/icon-512.png`
-- `tsconfig.tsbuildinfo`
+- `next.config.ts`
+- `package-lock.json`
+- `package.json`
+- `types/futu-api.d.ts`

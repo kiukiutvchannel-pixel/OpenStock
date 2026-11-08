@@ -12,7 +12,7 @@ import {
 import { historyIssueMessage, type DataIssue } from '@/lib/paper-trading/messages';
 
 export type DailyBar = { date: string; close: number };
-export type HistorySource = 'finnhub-candle' | 'demo' | 'unavailable';
+export type HistorySource = 'finnhub-candle' | 'futu-opend' | 'demo' | 'unavailable';
 
 export type HistoryAssessment = {
     ok: boolean;
@@ -65,7 +65,7 @@ export function assessDailyHistory(input: {
             message: historyIssueMessage('demo'),
         };
     }
-    if (input.source !== 'finnhub-candle') return fail('missing', 'unavailable');
+    if (input.source !== 'finnhub-candle' && input.source !== 'futu-opend') return fail('missing', 'unavailable');
     if (!input.bars) return fail('missing');
 
     const series = assessSeries(input.bars, expectedSession);
@@ -84,7 +84,7 @@ export function assessDailyHistory(input: {
         executable: true,
         closes: series.partial.closes,
         dates: series.partial.dates,
-        source: 'finnhub-candle',
+        source: input.source,
         latestBarDate: series.partial.latestBarDate,
         expectedSession,
         issue: null,
