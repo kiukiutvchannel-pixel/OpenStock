@@ -1,4 +1,5 @@
 
+> **穩步 SteadyTrade** — 基於 OpenStock（AGPL-3.0）修改。原作者與授權全文見 `LICENSE`，這份修改沒有改動該授權。
 
 <p align="center"><sub><a href="#sponsors">SPONSORED BY</a></sub></p>
 

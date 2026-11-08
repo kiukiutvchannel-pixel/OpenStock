@@ -6,6 +6,7 @@ import { headers } from "next/headers";
 import { INVESTMENT_GOALS, PREFERRED_INDUSTRIES, RISK_TOLERANCE_OPTIONS } from "@/lib/constants";
 import countryList from "react-select-country-list";
 import { clientIp, isRateLimited, TOO_MANY_ATTEMPTS } from "@/lib/rate-limit";
+import { zh } from "@/lib/i18n/zh-Hant";
 
 const isOption = (options: readonly { value: string }[], value: unknown) => options.some((o) => o.value === value);
 const COUNTRY_CODES = new Set(countryList().getValues()); // the same list the sign-up country picker shows
@@ -17,7 +18,7 @@ export const signUpWithEmail = async ({ email, password, fullName, country, inve
         || !isOption(INVESTMENT_GOALS, investmentGoals)
         || !isOption(RISK_TOLERANCE_OPTIONS, riskTolerance)
         || !isOption(PREFERRED_INDUSTRIES, preferredIndustry)) {
-        return { success: false, error: 'Sign up failed' };
+        return { success: false, error: zh.auth.signUpRejected };
     }
     // Each sign-up sends a welcome email from our Gmail and an AI call
     if (await isRateLimited(`sign-up:ip:${await clientIp()}`, 5, 60 * 60)) {
@@ -43,7 +44,7 @@ export const signUpWithEmail = async ({ email, password, fullName, country, inve
         return { success: true, data: response }
     } catch (e) {
         console.log('Sign up failed', e)
-        return { success: false, error: 'Sign up failed' }
+        return { success: false, error: zh.auth.signUpFailed }
     }
 }
 
@@ -77,7 +78,7 @@ export const signInWithEmail = async ({ email, password }: SignInFormData) => {
         return { success: true, data: response }
     } catch (e) {
         console.log('Sign in failed', e)
-        return { success: false, error: 'Sign in failed' }
+        return { success: false, error: zh.auth.signInFailed }
     }
 }
 
@@ -89,13 +90,13 @@ export const signInWithSocial = async (provider: 'google' | 'github') => {
         return { success: true, url }
     } catch (e) {
         console.log('Social sign in failed', e)
-        return { success: false, error: `${provider === 'google' ? 'Google' : 'GitHub'} sign in is not available right now.` }
+        return { success: false, error: zh.auth.socialUnavailable(provider === 'google' ? 'Google' : 'GitHub') }
     }
 }
 
 export const requestPasswordResetEmail =async ({ email }: { email: string }) => {
     if (!process.env.NODEMAILER_EMAIL || !process.env.NODEMAILER_PASSWORD) {
-        return { success: false, error: 'Password reset email is not configured.' }
+        return { success: false, error: zh.auth.resetNotConfigured }
     }
     // Every request sends a real email from our Gmail; unlimited requests could exhaust its daily quota
     if (await isRateLimited(`reset:email:${String(email).trim().toLowerCase()}`, 3, 60 * 60)
@@ -112,7 +113,7 @@ export const requestPasswordResetEmail =async ({ email }: { email: string }) => 
         if (!baseUrl) {
             return {
                 success: false,
-                error: 'BETTER_AUTH_URL must be configured before password reset emails can be sent.',
+                error: zh.auth.resetUrlMissing,
             }
         }
 
@@ -126,7 +127,7 @@ export const requestPasswordResetEmail =async ({ email }: { email: string }) => 
         return { success: true }
     } catch (e) {
         console.log('Password reset request failed', e)
-        return { success: false, error: 'Unable to send password reset email.' }
+        return { success: false, error: zh.auth.resetSendFailed }
     }
 }
 
@@ -144,7 +145,7 @@ export const resetPasswordWithToken = async (
         return { success: true }
     } catch (e) {
         console.log('Password reset failed', e)
-        return { success: false, error: 'Reset link is invalid or expired.' }
+        return { success: false, error: zh.auth.resetInvalid }
     }
 }
 
@@ -153,7 +154,7 @@ export const signOut = async () => {
         await auth.api.signOut({ headers: await headers() });
     } catch (e) {
         console.log('Sign out failed', e)
-        return { success: false, error: 'Sign out failed' }
+        return { success: false, error: zh.auth.signOutFailed }
     }
 }
 

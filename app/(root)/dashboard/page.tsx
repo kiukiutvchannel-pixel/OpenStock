@@ -15,6 +15,7 @@ import {
 } from "@/lib/constants";
 import { MARKETS, MARKET_COOKIE, getMarket, isMarketOpen, marketForCountry } from "@/lib/markets";
 import { getSession } from "@/lib/better-auth/auth";
+import { zh } from "@/lib/i18n/zh-Hant";
 
 const scriptUrl = `https://s3.tradingview.com/external-embedding/embed-widget-`;
 
@@ -26,19 +27,22 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
     const market = getMarket(requested ?? saved ?? marketForCountry((await getSession())?.user.country));
     const open = isMarketOpen(market);
     const native = market.pulse.some((p) => p.finnhub);
-    const pulseSub = native ? 'Our shared quotes via Finnhub' : market.yahoo ? 'Delayed quotes via Yahoo Finance' : `${market.feed} quotes via TradingView`;
+    const marketName = zh.dashboard.markets[market.id] ?? market.name;
+    const feedLabel = zh.dashboard.feed[market.feed] ?? market.feed;
+    const groups = market.groups.map((group) => ({ ...group, title: zh.dashboard.groups[group.title] ?? group.title }));
+    const pulseSub = native ? zh.dashboard.pulseFinnhub : market.yahoo ? zh.dashboard.pulseYahoo : zh.dashboard.pulseTradingView(feedLabel);
     const heatmap = market.heatmap === 'stocks'
-        ? { script: 'stock-heatmap.js', config: STOCK_HEATMAP_CONFIG, title: 'S&P 500 heatmap' }
+        ? { script: 'stock-heatmap.js', config: STOCK_HEATMAP_CONFIG, title: zh.dashboard.heatmapSp }
         : market.heatmap === 'crypto'
-            ? { script: 'crypto-coins-heatmap.js', config: CRYPTO_HEATMAP_CONFIG, title: 'Crypto heatmap' }
+            ? { script: 'crypto-coins-heatmap.js', config: CRYPTO_HEATMAP_CONFIG, title: zh.dashboard.heatmapCrypto }
             : null;
 
     return (
         <>
             <header className="page-head">
                 <div>
-                    <h1 className="page-title">Markets</h1>
-                    <p className="page-sub">{market.name} · {open ? 'open now' : 'closed now'} · {market.feed.toLowerCase()} data</p>
+                    <h1 className="page-title">{zh.dashboard.title}</h1>
+                    <p className="page-sub">{marketName} · {open ? zh.dashboard.openNow : zh.dashboard.closedNow} · {feedLabel}</p>
                 </div>
             </header>
 
@@ -47,7 +51,7 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
             <section className="hatch">
                 <div className="section-head">
                     <div>
-                        <h2 className="section-title">Pulse</h2>
+                        <h2 className="section-title">{zh.dashboard.pulse}</h2>
                         <p className="section-sub">{pulseSub}</p>
                     </div>
                     {native && <DataFreshness />}
@@ -61,34 +65,34 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
             <div key={market.id} className="flex flex-col gap-3">
                 <div className="grid gap-3 xl:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
                     {market.yahoo ? (
-                        <Panel title="Movers" sub="Biggest moves today">
+                        <Panel title={zh.dashboard.movers} sub={zh.dashboard.moversSub}>
                             <SaudiMovers market={market} />
                         </Panel>
                     ) : (
-                        <Panel title="Leaders" sub="12-month trend by group">
-                            <TradingViewWidget scriptUrl={`${scriptUrl}market-overview.js`} config={marketOverviewConfig(market.groups)} height={560} />
+                        <Panel title={zh.dashboard.leaders} sub={zh.dashboard.leadersSub}>
+                            <TradingViewWidget scriptUrl={`${scriptUrl}market-overview.js`} config={marketOverviewConfig(groups)} height={560} />
                         </Panel>
                     )}
                     {heatmap ? (
-                        <Panel title={heatmap.title} sub="Sized by market cap, coloured by today’s move">
+                        <Panel title={heatmap.title} sub={zh.dashboard.heatmapSub}>
                             <TradingViewWidget scriptUrl={`${scriptUrl}${heatmap.script}`} config={heatmap.config} height={560} allowExpand />
                         </Panel>
                     ) : (
-                        <Panel title="Quotes" sub={`${market.name} leaders by group`}>
+                        <Panel title={zh.dashboard.quotes} sub={zh.dashboard.quotesSub(marketName)}>
                             {market.yahoo
                                 ? <SaudiQuotesTable market={market} />
-                                : <TradingViewWidget scriptUrl={`${scriptUrl}market-quotes.js`} config={marketQuotesConfig(market.groups)} height={560} />}
+                                : <TradingViewWidget scriptUrl={`${scriptUrl}market-quotes.js`} config={marketQuotesConfig(groups)} height={560} />}
                         </Panel>
                     )}
                 </div>
 
                 <div className="grid gap-3 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
                     {heatmap && (
-                        <Panel title="Quotes" sub={`${market.name} leaders by group`}>
-                            <TradingViewWidget scriptUrl={`${scriptUrl}market-quotes.js`} config={marketQuotesConfig(market.groups)} height={560} />
+                        <Panel title={zh.dashboard.quotes} sub={zh.dashboard.quotesSub(marketName)}>
+                            <TradingViewWidget scriptUrl={`${scriptUrl}market-quotes.js`} config={marketQuotesConfig(groups)} height={560} />
                         </Panel>
                     )}
-                    <Panel title="Top stories" sub="Newest first" className={heatmap ? '' : 'xl:col-span-2'}>
+                    <Panel title={zh.dashboard.stories} sub={zh.dashboard.storiesSub} className={heatmap ? '' : 'xl:col-span-2'}>
                         <TradingViewWidget scriptUrl={`${scriptUrl}timeline.js`} config={timelineConfig(market.news)} height={560} />
                     </Panel>
                 </div>

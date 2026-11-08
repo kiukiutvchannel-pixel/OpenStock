@@ -6,6 +6,7 @@ import { Star } from "lucide-react";
 import { toast } from "sonner";
 import { addToWatchlist, removeFromWatchlist } from "@/lib/actions/watchlist.actions";
 import { cn } from "@/lib/utils";
+import { zh } from "@/lib/i18n/zh-Hant";
 
 interface WatchlistButtonProps {
     symbol: string;
@@ -35,19 +36,19 @@ const WatchlistButton = ({ symbol, company, isInWatchlist, variant = "button", o
                     return;
                 }
             } else await removeFromWatchlist(symbol);
-            toast.success(next ? `${symbol} added to watchlist` : `${symbol} removed from watchlist`);
+            toast.success(next ? zh.watchlist.added(symbol) : zh.watchlist.removed(symbol));
             onWatchlistChange?.(symbol, next);
             router.refresh(); // sidebar lists the watchlist from the layout
         } catch (error) {
             console.error("Watchlist action failed:", error);
             setAdded(!next);
-            toast.error("Couldn’t update your watchlist");
+            toast.error(zh.watchlist.updateFailed);
         } finally {
             setLoading(false);
         }
     };
 
-    const label = added ? `Remove ${symbol} from watchlist` : `Add ${symbol} to watchlist`;
+    const label = added ? zh.watchlist.removeLabel(symbol) : zh.watchlist.addLabel(symbol);
 
     if (variant === "icon") {
         return (
@@ -60,7 +61,7 @@ const WatchlistButton = ({ symbol, company, isInWatchlist, variant = "button", o
     return (
         <button type="button" onClick={handleClick} disabled={loading} className={cn('btn btn-ghost', added && 'is-on')} aria-pressed={added}>
             <Star fill={added ? 'currentColor' : 'none'} />
-            {added ? 'Watching' : 'Watch'}
+            {added ? zh.watchlist.watching : zh.watchlist.watch}
         </button>
     );
 };

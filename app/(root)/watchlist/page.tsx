@@ -10,6 +10,7 @@ import NewsList from '@/components/watchlist/NewsList';
 import Panel from '@/components/Panel';
 import DataFreshness from '@/components/DataFreshness';
 import { SearchButton } from '@/components/SearchCommand';
+import { zh } from '@/lib/i18n/zh-Hant';
 
 const RowsSkeleton = ({ rows = 4 }: { rows?: number }) => (
     <div className="row-list" aria-busy="true">
@@ -41,29 +42,29 @@ export default async function WatchlistPage() {
         <>
             <header className="page-head">
                 <div>
-                    <h1 className="page-title">Watchlist</h1>
+                    <h1 className="page-title">{zh.watchlist.title}</h1>
                     <p className="page-sub num flex flex-wrap items-center gap-x-2">
-                        {symbols.length} {symbols.length === 1 ? 'symbol' : 'symbols'} <span aria-hidden>·</span> <DataFreshness />
+                        {zh.watchlist.symbolCount(symbols.length)} <span aria-hidden>·</span> <DataFreshness />
                     </p>
                 </div>
-                <SearchButton className="btn btn-primary"><Plus /> Add symbol</SearchButton>
+                <SearchButton className="btn btn-primary"><Plus /> {zh.watchlist.add}</SearchButton>
             </header>
 
             <div className="grid gap-3 xl:grid-cols-[minmax(0,1fr)_minmax(300px,360px)]">
                 <div className="flex min-w-0 flex-col gap-3">
-                    <Panel title="Symbols" sub="Click a row for charts, technicals and financials">
+                    <Panel title={zh.watchlist.symbols} sub={zh.watchlist.symbolsSub}>
                         <Suspense fallback={<RowsSkeleton rows={Math.max(1, Math.min(symbols.length, 6))} />}>
                             <Symbols symbols={symbols} />
                         </Suspense>
                     </Panel>
-                    <Panel title="News" sub={symbols.length ? 'Latest stories for the symbols you watch' : 'General market news'}>
+                    <Panel title={zh.watchlist.news} sub={symbols.length ? zh.watchlist.newsForSymbols : zh.watchlist.newsGeneral}>
                         <Suspense fallback={<RowsSkeleton />}>
                             <News symbols={symbols} />
                         </Suspense>
                     </Panel>
                 </div>
 
-                <Panel title="Alerts" sub={alertsEnabled ? `${activeAlerts} active · checked every 5 minutes` : 'An OpenStock Cloud feature'} className="self-start">
+                <Panel title={zh.watchlist.alerts} sub={alertsEnabled ? zh.watchlist.alertsActive(activeAlerts) : zh.watchlist.alertsCloud} className="self-start">
                     <AlertsPanel alerts={alerts} />
                 </Panel>
             </div>

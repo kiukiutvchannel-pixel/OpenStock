@@ -8,11 +8,13 @@ import { auth, getSession } from "@/lib/better-auth/auth";
 import { getUserWatchlist } from "@/lib/actions/watchlist.actions";
 import { getUserAlerts } from "@/lib/actions/alert.actions";
 import { alertsEnabled } from "@/lib/market-data";
+import { UI_LOCALE, UI_TIME_ZONE } from "@/lib/i18n/format";
+import { zh } from "@/lib/i18n/zh-Hant";
 
-export const metadata = { title: 'Profile | OpenStock' };
+export const metadata = { title: '個人檔案 | 穩步' };
 
 const METHOD_LABELS: Record<string, string> = {
-    credential: 'Email and password',
+    credential: zh.auth.methodEmail,
     google: 'Google',
     github: 'GitHub',
 };
@@ -29,12 +31,12 @@ export default async function ProfilePage() {
     ]);
     const linked = new Set(accounts.map((a: { providerId: string }) => a.providerId));
     const activeAlerts = alerts.filter((a: { triggered?: boolean }) => !a.triggered).length;
-    const memberSince = new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    const memberSince = new Date(user.createdAt).toLocaleDateString(UI_LOCALE, { timeZone: UI_TIME_ZONE, year: 'numeric', month: 'long' });
 
     const stats = [
-        { label: 'Watching', value: watchlist.length, icon: Star },
-        { label: alertsEnabled ? 'Active alerts' : 'Paused alerts', value: activeAlerts, icon: Bell },
-        { label: 'Sign-in methods', value: linked.size, icon: ShieldCheck },
+        { label: zh.auth.profileWatching, value: watchlist.length, icon: Star },
+        { label: alertsEnabled ? zh.auth.profileActiveAlerts : zh.auth.profilePausedAlerts, value: activeAlerts, icon: Bell },
+        { label: zh.auth.profileSignInMethods, value: linked.size, icon: ShieldCheck },
     ];
 
     return (
@@ -46,7 +48,7 @@ export default async function ProfilePage() {
                     </span>
                     <div className="min-w-0 flex-1">
                         <h1 className="truncate text-[22px] font-bold tracking-[-0.03em]">{user.name}</h1>
-                        <p className="truncate text-faint">{user.email} · member since {memberSince}</p>
+                        <p className="truncate text-faint">{user.email} · {zh.auth.profileMemberSince} {memberSince}</p>
                     </div>
                 </div>
                 <div className="bento mt-[3px]">
@@ -60,7 +62,7 @@ export default async function ProfilePage() {
             </section>
 
             <div className="grid items-start gap-3 xl:grid-cols-[minmax(0,1fr)_minmax(320px,420px)]">
-                <Panel title="Details" sub="Your name and what your welcome email is tailored to">
+                <Panel title={zh.auth.profileDetails} sub={zh.auth.profileDetailsSub}>
                     <ProfileForm
                         initial={{
                             name: user.name,
@@ -73,20 +75,20 @@ export default async function ProfilePage() {
                 </Panel>
 
                 <div className="flex min-w-0 flex-col gap-3">
-                    <Panel title="Sign-in methods" sub="Ways you can get into this account">
+                    <Panel title={zh.auth.profileMethods} sub={zh.auth.profileMethodsSub}>
                         <ul className="row-list">
                             {[...linked].map((id) => (
                                 <li key={id} className="flex items-center gap-3 px-3.5 py-3">
                                     <span className="bento-ico"><KeyRound /></span>
                                     <span className="flex-1 font-semibold">{METHOD_LABELS[id] ?? id}</span>
-                                    <span className="pill is-up">Connected</span>
+                                    <span className="pill is-up">{zh.auth.profileConnected}</span>
                                 </li>
                             ))}
                         </ul>
                     </Panel>
 
                     {linked.has('credential') && (
-                        <Panel title="Password" sub="Changing it signs out your other devices">
+                        <Panel title={zh.auth.profilePassword} sub={zh.auth.profilePasswordSub}>
                             <PasswordForm />
                         </Panel>
                     )}

@@ -12,6 +12,7 @@ import OpenDevSocietyBranding from '@/components/OpenDevSocietyBranding';
 import { Button } from '@/components/ui/button';
 import { resetPasswordWithToken } from '@/lib/actions/auth.actions';
 import { PASSWORD_VALIDATION } from '@/lib/constants';
+import { zh } from '@/lib/i18n/zh-Hant';
 
 type ResetPasswordFormData = {
     newPassword: string;
@@ -41,13 +42,13 @@ const ResetPasswordForm = () => {
 
     useEffect(() => {
         if (error === 'INVALID_TOKEN') {
-            toast.error('Reset link is invalid or expired.');
+            toast.error(zh.auth.resetInvalid);
         }
     }, [error]);
 
     const onSubmit = async (data: ResetPasswordFormData) => {
         if (!token) {
-            toast.error('Reset link is invalid or expired.');
+            toast.error(zh.auth.resetInvalid);
             return;
         }
 
@@ -58,33 +59,31 @@ const ResetPasswordForm = () => {
             });
 
             if (result.success) {
-                toast.success('Password updated. You can sign in now.');
+                toast.success(zh.auth.passwordUpdated);
                 router.push('/sign-in');
                 return;
             }
 
-            toast.error('Password reset failed', {
-                description: result.error ?? 'Unable to reset your password.',
+            toast.error(zh.auth.resetFailed, {
+                description: result.error ?? zh.auth.resetUnable,
             });
         } catch (error) {
-            toast.error('Password reset failed', {
-                description: error instanceof Error ? error.message : 'Unable to reset your password.',
+            toast.error(zh.auth.resetFailed, {
+                description: error instanceof Error ? error.message : zh.auth.resetUnable,
             });
         }
     };
 
     return (
         <>
-            <h1 className="form-title">Choose a new password</h1>
-            <p className="text-sm text-gray-400 mb-6">
-                Enter a new password for your account.
-            </p>
+            <h1 className="form-title">{zh.auth.newPasswordTitle}</h1>
+            <p className="text-sm text-gray-400 mb-6">{zh.auth.newPasswordSub}</p>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                 <InputField
                     name="newPassword"
-                    label="New Password"
-                    placeholder="Enter a new password"
+                    label={zh.auth.newPassword}
+                    placeholder={zh.auth.passwordHint}
                     type="password"
                     register={register}
                     error={errors.newPassword}
@@ -94,23 +93,23 @@ const ResetPasswordForm = () => {
 
                 <InputField
                     name="confirmPassword"
-                    label="Confirm Password"
-                    placeholder="Confirm your new password"
+                    label={zh.auth.confirmPassword}
+                    placeholder={zh.auth.confirmPassword}
                     type="password"
                     register={register}
                     error={errors.confirmPassword}
                     validation={{
-                        required: 'Please confirm your new password',
+                        required: zh.auth.confirmPassword,
                         validate: (value: string) =>
-                            value === newPassword || 'Passwords do not match',
+                            value === newPassword || zh.auth.confirmMismatch,
                     }}
                 />
 
                 <Button type="submit" disabled={isSubmitting} className="yellow-btn w-full mt-5">
-                    {isSubmitting ? 'Resetting password' : 'Reset password'}
+                    {isSubmitting ? zh.auth.updatingPassword : zh.auth.updatePassword}
                 </Button>
 
-                <FooterLink text="Need a fresh link?" linkText="Request another one" href="/forgot-password" />
+                <FooterLink text={zh.auth.resetUnavailable} linkText={zh.auth.sendReset} href="/forgot-password" />
                 <OpenDevSocietyBranding outerClassName="mt-10 flex justify-center" />
             </form>
         </>

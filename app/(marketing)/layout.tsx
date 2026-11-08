@@ -1,6 +1,6 @@
 import Link from "next/link";
-import Image from "next/image";
 import { Github } from "lucide-react";
+import SteadyTradeLogo from "@/components/brand/SteadyTradeLogo";
 import { getSession } from "@/lib/better-auth/auth";
 import { formatCount, getRepoStats } from "@/lib/github";
 import OpenDevSocietyBranding from "@/components/OpenDevSocietyBranding";
@@ -32,8 +32,8 @@ export default async function MarketingLayout({ children }: { children: React.Re
             <UpdateBanner className="mx-5 mt-3 xl:mx-auto xl:max-w-[1160px]" />
             <header className="sticky top-0 z-40 border-b border-transparent bg-page/80 backdrop-blur-md">
                 <div className="mx-auto flex h-16 max-w-[1200px] items-center gap-6 px-5">
-                    <Link href="/" aria-label="OpenStock home" className="shrink-0">
-                        <Image src="/assets/images/logo.png" alt="OpenStock" width={140} height={35} priority />
+                    <Link href="/" aria-label="穩步 SteadyTrade" className="shrink-0">
+                        <SteadyTradeLogo iconClassName="size-9" />
                     </Link>
                     <nav className="hidden items-center gap-1 md:flex">
                         {[['/#inside', 'Product'], ['/#data', 'Data'], ['/#self-host', 'Self-host'], ['/about', 'About']].map(([href, label]) => (
@@ -44,7 +44,7 @@ export default async function MarketingLayout({ children }: { children: React.Re
                         </Link>
                     </nav>
                     <div className="ml-auto flex items-center gap-2">
-                        <a href={REPO_URL} target="_blank" rel="noreferrer" className="btn btn-ghost hidden h-9 px-3 sm:inline-flex" aria-label="OpenStock on GitHub">
+                        <a href={REPO_URL} target="_blank" rel="noreferrer" className="btn btn-ghost hidden h-9 px-3 sm:inline-flex" aria-label="穩步的上游 穩步 倉庫">
                             <Github />
                             {repo && <span className="num">{formatCount(repo.stars)}</span>}
                         </a>
@@ -66,8 +66,9 @@ export default async function MarketingLayout({ children }: { children: React.Re
 
             <footer className="mx-auto mt-24 flex max-w-[1200px] flex-col gap-6 px-5 pb-10 md:flex-row md:items-center md:justify-between">
                 <div className="flex flex-col gap-3">
-                    <Image src="/assets/images/logo.png" alt="OpenStock" width={120} height={30} />
+                    <SteadyTradeLogo iconClassName="size-8" />
                     <p className="text-[13px] text-faint">© {new Date().getFullYear()} Open Dev Society · AGPL-3.0</p>
+                    <p className="text-[13px] text-faint">基於 OpenStock（AGPL-3.0）修改</p>
                 </div>
                 <nav className="flex flex-wrap gap-x-5 gap-y-2 text-[13px] font-semibold text-muted-foreground">
                     {FOOTER_LINKS.map(({ href, label }) => (

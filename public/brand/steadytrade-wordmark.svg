@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 108" fill="none" role="img" aria-label="穩步 SteadyTrade">
+  <g transform="translate(0 22)">
+    <rect width="64" height="64" rx="15" fill="#0E1A33"/>
+    <path fill="#14B8A6" d="M13 42h10v12H13z"/>
+    <path fill="#10B981" d="M24 32h10v22H24z"/>
+    <path fill="#34D399" d="M35 22h10v32H35z"/>
+    <path d="M40 22c5-5 9.2-8.2 15.4-10" stroke="#34D399" stroke-width="5.2" stroke-linecap="round"/>
+    <circle cx="55.6" cy="11.8" r="3.15" fill="#F0C14A"/>
+  </g>
+  <text x="84" y="62" fill="#F4F7FB" font-family="Segoe UI, PingFang HK, Microsoft JhengHei, Noto Sans CJK TC, sans-serif" font-size="40" font-weight="700">SteadyTrade</text>
+  <text x="250" y="98" fill="#F4F7FB" text-anchor="middle" font-family="PingFang HK, Microsoft JhengHei, Noto Sans CJK TC, sans-serif" font-size="26" font-weight="600">穩步</text>
+</svg>

@@ -109,7 +109,7 @@ export const getChangeColorClass = (changePercent?: number) => {
 };
 
 export const formatPrice = (price: number, currency = 'USD') => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('zh-Hant-HK', {
         style: 'currency',
         currency,
         minimumFractionDigits: 2,

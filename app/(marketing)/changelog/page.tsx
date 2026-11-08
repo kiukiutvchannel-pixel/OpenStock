@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 export const metadata = {
     title: 'Changelog',
-    description: 'Everything that changed in OpenStock, release by release, since it started in September 2025.',
+    description: 'Everything that changed in 穩步, release by release, since it started in September 2025.',
 };
 
 // "#123" in an item becomes a link to that pull request
@@ -54,7 +54,7 @@ export default function ChangelogPage() {
         <>
             <PageHero
                 kicker="Changelog"
-                title="Everything that changed in OpenStock."
+                title="Everything that changed in 穩步."
                 sub="Every release since we started in September 2025, in plain words. Each change links to its pull request on GitHub."
             >
                 <Link href="/dashboard" className="btn btn-primary h-11 px-5 text-[15px]">Open dashboard</Link>
