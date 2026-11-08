@@ -2,8 +2,6 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
     devIndicators: false,
-    // futu-api is ESM and talks to local OpenD only from server actions.
-    serverExternalPackages: ['futu-api'],
     // /whats-new was live briefly before the changelog replaced it
     async redirects() {
         return [{ source: '/whats-new', destination: '/changelog', permanent: true }];

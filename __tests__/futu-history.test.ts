@@ -3,9 +3,12 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { tradingDaysEnding } from '@/lib/paper-trading/calendar';
 import {
     classifyFutuRet,
-    fetchFutuDailyBars,
+    decodeFutuPacket,
+    encodeFutuJsonPacket,
+    FUTU_PROTO_HISTORY_KL,
     futuUsSecurity,
     klineRowsToBars,
+    readFutuHistoryConfig,
     toFutuUsSymbol,
     FUTU_US_MARKET,
 } from '@/lib/paper-trading/futu-history';
@@ -41,7 +44,9 @@ describe('Futu history errors stay fail-closed', () => {
         expect(classifyFutuRet('历史K线额度不足')).toBe('futu_quota');
         expect(classifyFutuRet('no quote right for this symbol')).toBe('futu_permission');
         expect(historyIssueMessage('opend_down')).toContain('富途 OpenD');
-        expect(historyIssueMessage('opend_down')).toContain('WebSocket');
+        expect(historyIssueMessage('opend_down')).toContain('11111');
+        expect(historyIssueMessage('opend_down')).toContain('22222');
+        expect(historyIssueMessage('opend_down')).toContain('HTTP');
         expect(historyIssueMessage('futu_permission')).toContain('行情權限');
         expect(historyIssueMessage('futu_quota')).toContain('額度');
         expect(historySourceLabel('futu-opend')).toBe('富途 OpenD');
@@ -151,6 +156,21 @@ describe('Futu history errors stay fail-closed', () => {
         for (const banned of ['PlaceOrder', 'UnlockTrade', 'ModifyOrder', 'GetAccList', 'Trd_', 'place_order', 'unlock_trade']) {
             expect(source).not.toContain(banned);
         }
-        expect(source).toContain('RequestHistoryKL');
+        expect(source).toContain('FUTU_PROTO_HISTORY_KL');
+        expect(source).not.toContain('futu-api');
+    });
+
+    it('builds a JSON TCP history packet for US.AAPL and does not default to port 22222', () => {
+        expect(readFutuHistoryConfig({ HISTORY_PROVIDER: 'futu' })).toEqual({ host: '127.0.0.1', port: 11111 });
+        const security = futuUsSecurity('AAPL');
+        const packet = encodeFutuJsonPacket(FUTU_PROTO_HISTORY_KL, 2, {
+            c2s: { klType: 2, security, beginTime: '2026-04-01', endTime: '2026-11-08' },
+        });
+        const decoded = decodeFutuPacket(packet);
+        expect(decoded?.protoId).toBe(3103);
+        expect(decoded?.format).toBe(1);
+        const body = JSON.parse(decoded?.body.toString('utf8') ?? '{}') as { c2s: { security: { code: string } } };
+        expect(body.c2s.security).toEqual({ market: 11, code: 'AAPL' });
+        expect(toFutuUsSymbol('AAPL')).toBe('US.AAPL');
     });
 });

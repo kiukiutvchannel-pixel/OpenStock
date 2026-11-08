@@ -51,7 +51,7 @@ export function historyIssueMessage(issue: DataIssue): string {
         case 'demo':
             return '示範模式的數字是虛構的，不能自動落單，也不能當作真實成交。';
         case 'opend_down':
-            return '連不上富途 OpenD。請先開啟 FutuOpenD，在設定啟用 WebSocket，並確認 FUTU_OPEND_PORT 是 WebSocket 端口（通常不是 11111）。沒有用假歷史代替，因此不會產生可執行訊號。';
+            return '連不上富途 OpenD 的程序端口（TCP，預設 11111）。官方文件沒有 HTTP 歷史 K 線；畫面上的 HTTP WebAPI 22222 在文件裡是 Telnet，讀不到日線。請勾選「程序 (TCP)」，並把 FUTU_OPEND_PORT 設成 11111。沒有用假歷史代替，因此不會產生可執行訊號。';
         case 'futu_permission':
             return '富途沒有這隻美股的行情權限，讀不到日線。沒有用假歷史代替，因此不會產生可執行訊號。';
         case 'futu_quota':

@@ -1,14 +1,9 @@
-﻿.env.example
+.env.example
 MANIFEST.txt
 UPDATE.md
 __tests__/futu-history.test.ts
 lib/paper-trading/futu-history.ts
-lib/paper-trading/history.ts
-lib/paper-trading/labels.ts
 lib/paper-trading/messages.ts
-lib/paper-trading/quotes.ts
-lib/paper-trading/strategy.ts
 next.config.ts
 package-lock.json
 package.json
-types/futu-api.d.ts
