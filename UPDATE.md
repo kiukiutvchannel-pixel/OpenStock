@@ -1,4 +1,4 @@
-﻿﻿# 穩步 SteadyTrade 更新（安全修正 + 繁體中文 + 改名）
+﻿# 穩步 SteadyTrade 更新（安全修正 + 繁體中文 + 改名）
 
 呢個壓縮檔係**由你原本個 `openstock-paper` 源碼包到而家**所有改過嘅檔，一次過蓋上去就得。入面有：
 
@@ -74,7 +74,16 @@ Test-Path -LiteralPath "C:\Users\comfy\Desktop\openstock-paper\openstock-paper\.
 
 最後一行應該係 `True`。唔好用 `.env.example` 取代 `.env`。
 
-### 5. 依賴
+### 5. 刪走舊嘅 favicon
+
+舊包嘅 `public\favicon.ico` 會同 `app\favicon.ico` 撞名，Next.js 會報 `conflicting public file and page file for /favicon.ico`。複製完之後，如果個檔仲喺度，就刪咗佢。而家用緊嘅圖示係 `app\favicon.ico`。
+
+```powershell
+Set-Location -LiteralPath "C:\Users\comfy\Desktop\openstock-paper\openstock-paper"
+if (Test-Path -LiteralPath ".\public\favicon.ico") { Remove-Item -LiteralPath ".\public\favicon.ico" -Force }
+```
+
+### 6. 依賴
 
 呢次冇改依賴，可以跳過。如果 `node_modules` 唔見咗，先至行：
 
@@ -83,7 +92,7 @@ Set-Location -LiteralPath "C:\Users\comfy\Desktop\openstock-paper\openstock-pape
 npm.cmd ci
 ```
 
-### 6. 開返個程式
+### 7. 開返個程式
 
 ```powershell
 Set-Location -LiteralPath "C:\Users\comfy\Desktop\openstock-paper\openstock-paper"
@@ -98,7 +107,7 @@ npm.cmd run dev -- --hostname 127.0.0.1
 
 ## 檔案清單
 
-共 99 個檔。完整名單亦喺 `MANIFEST.txt`。壓縮檔唔包含 `.env`、`.git`、`node_modules`、`.next`。
+共 98 個檔。完整名單亦喺 `MANIFEST.txt`。壓縮檔唔包含 `.env`、`.git`、`node_modules`、`.next`。
 
 - `.env.example`
 - `MANIFEST.txt`
@@ -190,7 +199,6 @@ npm.cmd run dev -- --hostname 127.0.0.1
 - `next-env.d.ts`
 - `public/brand/steadytrade-icon.svg`
 - `public/brand/steadytrade-wordmark.svg`
-- `public/favicon.ico`
 - `public/icons/apple-touch-icon.png`
 - `public/icons/icon-16.png`
 - `public/icons/icon-180.png`

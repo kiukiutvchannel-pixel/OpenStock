@@ -88,7 +88,6 @@ lib/utils.ts
 next-env.d.ts
 public/brand/steadytrade-icon.svg
 public/brand/steadytrade-wordmark.svg
-public/favicon.ico
 public/icons/apple-touch-icon.png
 public/icons/icon-16.png
 public/icons/icon-180.png
